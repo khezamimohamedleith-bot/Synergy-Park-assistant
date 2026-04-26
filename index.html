@@ -1,0 +1,2444 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#1A1A2E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="⚡ SP">
+<title>⚡ Synergy Park Equipment V3</title>
+<link rel="manifest" id="pwa-manifest">
+<style>
+/* ══ SPLASH ══ */
+#splash{position:fixed;inset:0;background:linear-gradient(160deg,#0D0D1A,#1A1A2E 50%,#0F3460);
+  z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .8s ease,transform .8s ease}
+#splash.hide{opacity:0;transform:scale(1.04);pointer-events:none}
+.spl-logo{width:96px;height:96px;background:linear-gradient(135deg,#C9A84C,#F5E6C0,#C9A84C);
+  border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:46px;
+  box-shadow:0 0 0 8px rgba(201,168,76,.12),0 0 60px rgba(201,168,76,.45);
+  animation:splPulse 2s ease infinite;margin-bottom:22px}
+@keyframes splPulse{0%,100%{box-shadow:0 0 0 8px rgba(201,168,76,.1),0 0 40px rgba(201,168,76,.3)}
+  50%{box-shadow:0 0 0 14px rgba(201,168,76,.18),0 0 80px rgba(201,168,76,.6)}}
+.spl-brand{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:#fff;letter-spacing:3px}
+.spl-sub{font-size:11px;color:rgba(255,255,255,.38);letter-spacing:4px;text-transform:uppercase;margin-top:5px}
+.spl-tag{font-size:12px;color:rgba(201,168,76,.65);font-style:italic;margin-top:14px}
+.spl-bar{width:150px;height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:36px;overflow:hidden}
+.spl-fill{height:100%;background:linear-gradient(90deg,#C9A84C,#F5E6C0);border-radius:2px;animation:splLoad 2.6s ease forwards}
+@keyframes splLoad{from{width:0}to{width:100%}}
+.spl-ver{position:absolute;bottom:28px;font-size:10px;color:rgba(255,255,255,.18);letter-spacing:2px}
+/* ══ GOLD ACCENTS ══ */
+.top-bar{box-shadow:0 2px 0 rgba(201,168,76,.5) !important}
+.top-logo{background:linear-gradient(135deg,#C9A84C,#E8C96A) !important;box-shadow:0 0 16px rgba(201,168,76,.4) !important}
+/* ══ CONFIRM DIALOG ══ */
+.dlg-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.dlg-overlay.on{display:flex;animation:fadeIn .22s}
+.dlg-box{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:320px;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:dlgIn .25s ease}
+@keyframes dlgIn{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+.dlg-ico{font-size:42px;text-align:center;margin-bottom:10px}
+.dlg-ttl{font-weight:700;font-size:16px;color:#1A1A2E;text-align:center;margin-bottom:7px}
+.dlg-txt{font-size:13px;color:#78716C;text-align:center;line-height:1.6;margin-bottom:18px}
+.dlg-btns{display:flex;gap:10px}
+/* ══ FACTURE SHARE BAR ══ */
+.share-bar{display:flex;gap:8px;padding:12px 14px;background:#FDFAF6;border-top:1px solid #E7E5E4;flex-wrap:wrap}
+.share-btn{flex:1;min-width:70px;display:flex;align-items:center;justify-content:center;gap:5px;padding:9px 10px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;border:none;transition:all .18s}
+.share-btn:active{transform:scale(.93)}
+/* ══ DOC TABS ══ */
+.doc-subtab{flex:1;padding:11px;text-align:center;font-size:12px;cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s;font-weight:600;color:var(--text2)}
+.doc-subtab.on{border-bottom-color:var(--amber2);color:var(--navy);font-weight:700}
+/* ══ SOUND BARS ANIM ══ */
+@keyframes sb{0%,100%{height:4px}50%{height:13px}}
+.sbar span{display:inline-block;width:3px;border-radius:2px;background:#FCD34D;vertical-align:bottom;animation:sb .55s infinite}
+.sbar span:nth-child(2){animation-delay:.12s}.sbar span:nth-child(3){animation-delay:.24s}.sbar span:nth-child(4){animation-delay:.06s}
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Rajdhani:wght@600;700&display=swap');
+:root{
+  --navy:#1A1A2E; --navy2:#16213E; --navy3:#0F3460;
+  --amber:#D97706; --amber2:#F59E0B; --amber3:#FDE68A; --amber4:#FFFBEB;
+  --orange:#EA580C; --green:#059669; --green2:#D1FAE5;
+  --red:#DC2626; --red2:#FEE2E2; --blue:#1E40AF; --blue2:#DBEAFE;
+  --teal:#0F766E; --teal2:#CCFBF1;
+  --bg:#F8F6F1; --card:#FFFFFF; --card2:#FDFAF6;
+  --text:#1C1917; --text2:#78716C; --text3:#A8A29E;
+  --border:#E7E5E4; --border2:#F5F5F4;
+  --sh:0 2px 12px rgba(0,0,0,.08); --sh2:0 8px 32px rgba(0,0,0,.14);
+  --r:14px; --r2:10px; --r3:20px;
+  --tab-h:64px; --top-h:56px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--navy)}
+body{font-family:'Poppins',sans-serif;color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased}
+
+/* ── STATUS BAR SPACER ── */
+.status-bar{height:env(safe-area-inset-top,24px);background:var(--navy);position:fixed;top:0;left:0;right:0;z-index:1000}
+
+/* ── TOP APP BAR ── */
+.top-bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:var(--top-h);background:var(--navy);z-index:900;
+  display:flex;align-items:center;justify-content:space-between;padding:0 16px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  box-shadow:0 2px 0 rgba(217,119,6,.5)}
+.top-bar-brand{display:flex;align-items:center;gap:10px}
+.top-logo{width:36px;height:36px;background:linear-gradient(135deg,#D97706,#F59E0B);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  box-shadow:0 0 18px rgba(217,119,6,.6)}
+.top-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#fff;letter-spacing:1.5px}
+.top-sub{font-size:9px;color:rgba(255,255,255,.38);letter-spacing:.8px;display:block;margin-top:-3px}
+.top-actions{display:flex;align-items:center;gap:8px}
+.top-btn{width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#fff;transition:all .2s;position:relative}
+.top-btn:active{transform:scale(.92)}
+.top-btn.amber{background:rgba(217,119,6,.25);border-color:rgba(245,158,11,.5);color:#FCD34D}
+.badge-dot{position:absolute;top:-3px;right:-3px;width:10px;height:10px;background:#EF4444;border-radius:50%;border:2px solid var(--navy)}
+
+/* ── MAIN SCROLL AREA ── */
+#app{position:fixed;top:calc(env(safe-area-inset-top,0px) + var(--top-h));bottom:calc(var(--tab-h) + var(--safe-bottom));left:0;right:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--bg)}
+
+/* ── BOTTOM TAB BAR ── */
+.tab-bar{position:fixed;bottom:0;left:0;right:0;height:calc(var(--tab-h) + var(--safe-bottom));background:var(--navy);
+  display:flex;align-items:flex-start;padding:8px 0 0;padding-bottom:var(--safe-bottom);
+  border-top:1px solid rgba(255,255,255,.08);z-index:900;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;transition:all .2s;padding:4px 0;position:relative}
+.tab-item .ti{font-size:20px;line-height:1;transition:transform .2s}
+.tab-item .tl{font-size:9px;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.3px;transition:color .2s}
+.tab-item.active .ti{transform:scale(1.1) translateY(-2px);filter:drop-shadow(0 0 6px rgba(245,158,11,.7))}
+.tab-item.active .tl{color:#F59E0B}
+.tab-item .tab-badge{position:absolute;top:2px;right:calc(50% - 14px);min-width:16px;height:16px;background:#EF4444;
+  border-radius:8px;font-size:9px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+/* ── SCREEN ── */
+.screen{display:none;animation:slideUp .22s ease}
+.screen.active{display:block}
+@keyframes slideUp{from{opacity:.6;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── PAGE SECTIONS ── */
+.sect{padding:16px 14px}
+.sect-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--navy);letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sect-title small{font-size:11px;font-weight:400;color:var(--text2);letter-spacing:0;margin-left:auto;font-family:'Poppins',sans-serif}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:0 0 20px 20px;margin-bottom:4px}
+.kpi-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.kpi-card:active{transform:scale(.97)}
+.kpi-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.04),transparent);border-radius:12px}
+.kpi-val{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1}
+.kpi-lbl{font-size:9px;color:rgba(255,255,255,.45);margin-top:4px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.kpi-sub{font-size:10px;color:rgba(255,255,255,.55);margin-top:3px}
+.kpi-icon{position:absolute;right:10px;top:10px;font-size:22px;opacity:.35}
+.kpi-green .kpi-val{color:#6EE7B7}
+.kpi-amber .kpi-val{color:#FCD34D}
+.kpi-red .kpi-val{color:#FCA5A5}
+.kpi-blue .kpi-val{color:#93C5FD}
+.kpi-wide{grid-column:1/-1;background:rgba(217,119,6,.15);border-color:rgba(245,158,11,.3)}
+.kpi-wide .kpi-val{font-size:26px;color:#FCD34D}
+
+/* ── HERO BANNER ── */
+.hero-banner{background:linear-gradient(135deg,var(--navy),#0F3460);padding:18px 16px 14px;position:relative;overflow:hidden}
+.hero-banner::after{content:'⚡';position:absolute;right:-10px;bottom:-20px;font-size:100px;opacity:.04}
+.hero-wave{position:absolute;bottom:0;left:0;right:0;height:20px;background:var(--bg);border-radius:20px 20px 0 0}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:10px}
+.card-header{padding:12px 14px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between}
+.card-body{padding:12px 14px}
+.card-title{font-weight:700;font-size:13px;color:var(--navy)}
+
+/* ── STOCK ITEM CARD ── */
+.stock-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:10px;overflow:hidden;cursor:pointer;transition:all .2s}
+.stock-card:active{transform:scale(.98)}
+.stock-card-head{padding:12px 14px 8px;display:flex;align-items:flex-start;gap:10px}
+.stock-card-code{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;color:var(--amber);background:var(--amber4);border:1px solid rgba(217,119,6,.2);border-radius:6px;padding:2px 7px;white-space:nowrap}
+.stock-card-name{font-weight:600;font-size:13px;color:var(--navy);flex:1;line-height:1.35}
+.stock-card-body{padding:0 14px 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stock-card-actions{padding:8px 14px;background:var(--card2);border-top:1px solid var(--border2);display:flex;gap:8px}
+
+/* ── BADGE / TAG ── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap}
+.b-pret{background:#D1FAE5;color:#065F46}
+.b-urg{background:#FEF3C7;color:#92400E}
+.b-pri{background:#DBEAFE;color:#1E40AF}
+.b-cours{background:#F1F5F9;color:#475569}
+.b-perte{background:#FEE2E2;color:#991B1B}
+.b-chr{background:#DBEAFE;color:#1E40AF}
+.b-liq{background:#F3E8FF;color:#6B21A8}
+
+/* ── PROGRESS BAR ── */
+.prog{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin:6px 0}
+.prog-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--amber),var(--amber2));transition:width .4s}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
+.btn:active{transform:scale(.95)}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-amber{background:var(--amber);color:#fff;box-shadow:0 4px 14px rgba(217,119,6,.4)}
+.btn-green{background:var(--green);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--border)}
+.btn-ghost{background:var(--card2);color:var(--text2);border:1px solid var(--border)}
+.btn-full{width:100%}
+.btn-sm{padding:6px 12px;font-size:11px}
+.btn-lg{padding:13px 20px;font-size:14px;border-radius:12px}
+
+/* ── INPUTS ── */
+.fg{margin-bottom:12px}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+.fg input,.fg select,.fg textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:13px;color:var(--text);background:var(--card);outline:none;transition:border-color .2s;-webkit-appearance:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--amber)}
+.fg textarea{resize:vertical;min-height:70px}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ── SEARCH BAR ── */
+.search-bar{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin:12px 14px}
+.search-bar input{flex:1;border:none;outline:none;font-size:13px;color:var(--text);background:transparent}
+
+/* ── FILTER CHIPS ── */
+.chips{display:flex;gap:8px;padding:0 14px 12px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border:1.5px solid var(--border);background:var(--card);color:var(--text2);transition:all .2s}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.chip:active{transform:scale(.95)}
+
+/* ── BOTTOM SHEET / MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:flex-end}
+.overlay.open{display:flex;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.sheet{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-height:92vh;overflow-y:auto;padding-bottom:calc(20px + var(--safe-bottom));animation:slideSheet .28s ease}
+@keyframes slideSheet{from{transform:translateY(80px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 16px;cursor:grab}
+.sheet-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--navy);padding:0 18px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sheet-body{padding:16px 18px}
+
+/* ── FULL MODAL ── */
+.modal-full{position:fixed;inset:0;background:var(--bg);z-index:1100;display:none;flex-direction:column;overflow:hidden}
+.modal-full.open{display:flex}
+.modal-top{height:calc(var(--top-h) + env(safe-area-inset-top,0px));background:var(--navy);display:flex;align-items:flex-end;padding:0 16px 12px;gap:12px;flex-shrink:0}
+.modal-top-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#fff;flex:1}
+.modal-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px}
+
+/* ── LIST ITEMS ── */
+.list-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border-bottom:1px solid var(--border2);cursor:pointer;transition:background .15s}
+.list-item:active{background:var(--card2)}
+.list-item:last-child{border-bottom:none}
+.li-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.li-main{flex:1;min-width:0}
+.li-name{font-weight:600;font-size:13px;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.li-right{text-align:right;flex-shrink:0}
+.li-val{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--navy)}
+.li-meta{font-size:10px;color:var(--text3);margin-top:2px}
+
+/* ── MESSAGERIE ── */
+.msg-thread{display:flex;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border2);cursor:pointer;background:var(--card);transition:background .15s;align-items:flex-start}
+.msg-thread:active{background:var(--card2)}
+.msg-avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;font-weight:700;font-family:'Rajdhani',sans-serif}
+.msg-body{flex:1;min-width:0}
+.msg-name{font-weight:700;font-size:13px;color:var(--navy)}
+.msg-preview{font-size:11px;color:var(--text2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-time{font-size:10px;color:var(--text3);text-align:right;flex-shrink:0}
+.msg-unread{background:#EF4444;color:#fff;border-radius:50%;min-width:18px;height:18px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;margin-top:4px;margin-left:auto}
+
+/* CHAT VIEW */
+.chat-wrap{display:flex;flex-direction:column;height:100%}
+.chat-msgs{flex:1;overflow-y:auto;padding:14px;background:#E5DDD5}
+.bubble{max-width:78%;margin-bottom:10px;clear:both}
+.bubble.out{float:right}.bubble.in{float:left}
+.bubble-inner{padding:9px 12px;border-radius:12px;font-size:12px;line-height:1.55;position:relative;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.bubble.out .bubble-inner{background:#DCF8C6;border-bottom-right-radius:2px;color:#1C1917}
+.bubble.in .bubble-inner{background:#fff;border-bottom-left-radius:2px;color:#1C1917}
+.bubble-time{font-size:9px;color:var(--text3);margin-top:3px;text-align:right;display:block}
+.chat-input-area{background:var(--card);padding:10px 12px;display:flex;align-items:center;gap:10px;border-top:1px solid var(--border)}
+.chat-input{flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:22px;padding:9px 16px;font-size:13px;outline:none;font-family:'Poppins',sans-serif}
+.chat-send{width:42px;height:42px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#fff;flex-shrink:0;transition:all .2s}
+.chat-send:active{transform:scale(.9)}
+
+/* ── QUICK ACTION GRID ── */
+.qa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px}
+.qa-btn{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all .2s}
+.qa-btn:active{transform:scale(.92)}
+.qa-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.qa-label{font-size:10px;font-weight:600;color:var(--text2);text-align:center;line-height:1.3}
+
+/* ── ALERT STRIP ── */
+.alert-strip{margin:10px 14px;background:var(--red2);border:1px solid rgba(220,38,38,.2);border-radius:11px;padding:10px 13px;display:flex;align-items:center;gap:10px}
+.alert-strip.warn{background:#FEF3C7;border-color:rgba(217,119,6,.2)}
+.alert-strip.ok{background:var(--green2);border-color:rgba(5,150,105,.2)}
+.al-text{flex:1;font-size:11px;color:var(--text)}
+.al-text strong{color:var(--red)}
+.alert-strip.warn .al-text strong{color:#92400E}
+.alert-strip.ok .al-text strong{color:#065F46}
+
+/* ── DIRECTION GÉNÉRALE ── */
+.dir-header{background:linear-gradient(135deg,#1A1A2E 0%,#0F3460 100%);padding:20px 16px 32px;position:relative;overflow:hidden}
+.dir-header::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;background:rgba(217,119,6,.1);border-radius:50%}
+.dir-header::after{content:'';position:absolute;right:20px;bottom:-40px;width:100px;height:100px;background:rgba(217,119,6,.07);border-radius:50%}
+.dir-title{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.dir-kpi-main{font-family:'Rajdhani',sans-serif;font-size:38px;font-weight:700;color:#FCD34D;line-height:1}
+.dir-kpi-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:6px}
+.dir-trend{display:inline-flex;align-items:center;gap:4px;background:rgba(5,150,105,.2);border:1px solid rgba(5,150,105,.3);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:#6EE7B7;margin-top:8px}
+
+/* ── FAB ── */
+.fab{position:fixed;right:20px;bottom:calc(var(--tab-h) + var(--safe-bottom) + 14px);width:52px;height:52px;background:linear-gradient(135deg,#D97706,#F59E0B);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(217,119,6,.5),0 2px 8px rgba(0,0,0,.2);z-index:800;transition:all .2s}
+.fab:active{transform:scale(.9)}
+
+/* ── STATS ROW ── */
+.stats-row{display:flex;gap:0;background:var(--card);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);margin-bottom:4px}
+.stat-cell{flex:1;padding:12px 6px;text-align:center;border-right:1px solid var(--border2)}
+.stat-cell:last-child{border-right:none}
+.stat-val{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--navy)}
+.stat-lbl{font-size:9px;color:var(--text3);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+
+/* ── PLATFORM LINKS ── */
+.plat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s}
+.plat-card:active{transform:scale(.98)}
+.plat-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.plat-info{flex:1}
+.plat-name{font-weight:700;font-size:14px;color:var(--navy)}
+.plat-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.plat-action{font-size:18px;color:var(--text3)}
+
+/* ── CATALOGUE CARD ── */
+.cat-mcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.cat-mcard-head{background:var(--card2);padding:10px 14px;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:10px}
+.cat-mcard-body{padding:12px 14px}
+.cat-mcode{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:var(--amber);background:var(--amber4);border:1px solid rgba(217,119,6,.2);border-radius:5px;padding:2px 8px}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;top:calc(env(safe-area-inset-top,0px) + 70px);left:50%;transform:translateX(-50%);z-index:2000;display:flex;flex-direction:column;gap:8px;pointer-events:none;min-width:240px}
+.toast{background:var(--navy);color:#fff;padding:10px 18px;border-radius:12px;font-size:12px;font-weight:600;box-shadow:var(--sh2);text-align:center;animation:toastIn .3s ease;pointer-events:none;border-left:3px solid var(--amber)}
+.toast.green{border-left-color:var(--green)}
+.toast.red{border-left-color:var(--red)}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── MISC ── */
+.divider{height:1px;background:var(--border);margin:14px 0}
+.text-center{text-align:center}
+.text-muted{color:var(--text2);font-size:12px}
+.empty-state{padding:48px 24px;text-align:center}
+.empty-state .icon{font-size:48px;margin-bottom:14px;display:block;filter:grayscale(1);opacity:.35}
+.empty-state p{color:var(--text3);font-size:13px}
+.money{font-family:'Rajdhani',sans-serif;font-weight:700}
+.money.pos{color:var(--green)}
+.money.neg{color:var(--red)}
+.money.neutral{color:var(--navy)}
+.section-divider{background:var(--bg);padding:10px 14px 4px;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px}
+.rounded-list{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+
+/* ── SWIPE HINT ── */
+@keyframes swipePulse{0%,100%{opacity:.4}50%{opacity:1}}
+.swipe-hint{font-size:10px;color:var(--text3);text-align:center;padding:8px;animation:swipePulse 2s infinite}
+</style>
+</head>
+<body>
+
+<!-- ══ SPLASH ══ -->
+<div id="splash">
+  <div class="spl-logo">⚡</div>
+  <div class="spl-brand">SYNERGY PARK</div>
+  <div class="spl-sub">Equipment · CHR Pro · Radès</div>
+  <div class="spl-tag">Matériel professionnel occasion · Contrôlé & Garanti</div>
+  <div class="spl-bar"><div class="spl-fill"></div></div>
+  <div class="spl-ver">V3.0 · 2026</div>
+</div>
+
+<!-- ══ CONFIRM EXIT DIALOG ══ -->
+<div class="dlg-overlay" id="dlg-exit">
+  <div class="dlg-box">
+    <div class="dlg-ico">👋</div>
+    <div class="dlg-ttl">Quitter l'application ?</div>
+    <div class="dlg-txt">Toutes vos données sont sauvegardées sur votre téléphone.</div>
+    <div class="dlg-btns">
+      <button class="btn btn-outline btn-full" onclick="document.getElementById('dlg-exit').classList.remove('on')">Annuler</button>
+      <button class="btn btn-red btn-full" onclick="history.go(-history.length)">Quitter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRM DELETE DIALOG ══ -->
+<div class="dlg-overlay" id="dlg-del">
+  <div class="dlg-box">
+    <div class="dlg-ico">🗑️</div>
+    <div class="dlg-ttl">Confirmer la suppression ?</div>
+    <div class="dlg-txt" id="dlg-del-txt">—</div>
+    <div class="dlg-btns">
+      <button class="btn btn-outline btn-full" onclick="document.getElementById('dlg-del').classList.remove('on')">Annuler</button>
+      <button class="btn btn-red btn-full" id="dlg-del-ok">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FULL MODAL: FACTURE/DEVIS FORM ══ -->
+<div class="mfull" id="m-facture">
+  <div class="modal-top" style="background:linear-gradient(135deg,#1A1A2E,#0F3460)">
+    <div onclick="closeModal('m-facture');navHist.pop()" style="color:rgba(255,255,255,.6);font-size:22px;cursor:pointer">←</div>
+    <div class="modal-top-title" id="fac-modal-ttl">🧾 Nouvelle Facture</div>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-ghost btn-sm" onclick="printFacture()" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.15)">🖨️ PDF</button>
+      <button class="btn btn-amber btn-sm" onclick="saveFacture()">💾 Sauver</button>
+    </div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:14px">
+    <input type="hidden" id="fac-id"><input type="hidden" id="fac-type">
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><span class="card-title">🏢 Informations Client</span>
+        <button class="btn btn-ghost btn-sm" onclick="prefillFacClient()">📋 Choisir</button></div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="fg" style="margin-bottom:0"><label>Nom client</label><input id="fac-cnom" placeholder="Nom"></div>
+          <div class="fg" style="margin-bottom:0"><label>Téléphone</label><input id="fac-ctel" placeholder="+216..."></div>
+        </div>
+        <div class="fg" style="margin-top:10px;margin-bottom:0"><label>Adresse</label><input id="fac-cadr" placeholder="Adresse complète"></div>
+        <div id="fac-status-wrap" style="margin-top:10px;margin-bottom:0">
+          <div class="fg" style="margin-bottom:0"><label>Statut paiement</label>
+            <select id="fac-status"><option value="pending">⏳ En attente</option><option value="partial">⚡ Partiel</option><option value="paid">✅ Payé</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><span class="card-title">📋 Articles</span>
+        <button class="btn btn-amber btn-sm" onclick="addFacLine()">➕ Ligne</button></div>
+      <div id="fac-lines"></div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><span class="card-title">💰 Total</span></div>
+      <div class="card-body">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:var(--amber)" id="fac-total">0 DT</div>
+        <div class="fg" style="margin-top:10px;margin-bottom:0"><label>Notes / Conditions</label><textarea id="fac-notes" rows="2" placeholder="Conditions de paiement, remises..."></textarea></div>
+        <div class="fg" style="margin-top:10px;margin-bottom:0"><label>Validité</label><input id="fac-valid" type="date"></div>
+      </div>
+    </div>
+    <!-- SHARE BAR -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-header"><span class="card-title">📤 Partager Directement</span></div>
+      <div class="share-bar">
+        <button class="share-btn" onclick="shareDoc('wa')" style="background:#25D366;color:#fff">📱 WhatsApp</button>
+        <button class="share-btn" onclick="shareDoc('fb')" style="background:#1877F2;color:#fff">📘 Facebook</button>
+        <button class="share-btn" onclick="shareDoc('ig')" style="background:linear-gradient(135deg,#E1306C,#833AB4);color:#fff">📸 Instagram</button>
+        <button class="share-btn" onclick="shareDoc('copy')" style="background:var(--navy);color:#fff">📋 Copier</button>
+        <button class="share-btn" onclick="shareDoc('native')" style="background:var(--card2);color:var(--navy);border:1.5px solid var(--border)">↗ Partager</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FULL MODAL: CHOIX CLIENT POUR FACTURE ══ -->
+<div class="mfull" id="m-pick-client">
+  <div class="modal-top">
+    <div onclick="closeModal('m-pick-client')" style="color:rgba(255,255,255,.6);font-size:22px;cursor:pointer">←</div>
+    <div class="modal-top-title">👥 Choisir un Client</div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:10px 14px" id="pick-client-list"></div>
+</div>
+
+<!-- ── TOP BAR ── -->
+<div class="top-bar">
+  <div class="top-bar-brand">
+    <div class="top-logo">⚡</div>
+    <div>
+      <div class="top-title">SYNERGY PARK</div>
+      <span class="top-sub">ÉQUIPEMENT CHR PRO · RADÈS</span>
+    </div>
+  </div>
+  <div class="top-actions">
+    <div class="top-btn" id="alert-btn" onclick="go('alertes')" title="Alertes">🔔<span class="badge-dot" id="alert-dot" style="display:none"></span></div>
+    <div class="top-btn amber" id="sound-btn" onclick="toggleSound()" title="Son">🔇</div>
+    <div class="top-btn" onclick="openAddSheet()" title="Nouveau">➕</div>
+  </div>
+</div>
+
+<!-- ── MAIN APP ── -->
+<div id="app">
+
+  <!-- ══════════ SCREEN: DIRECTION ══════════ -->
+  <div class="screen active" id="s-dir">
+    <div class="dir-header">
+      <div class="dir-title">📊 DIRECTION GÉNÉRALE</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:8px" id="dir-date">—</div>
+      <div class="dir-kpi-main" id="dir-marge">—</div>
+      <div class="dir-kpi-sub">Marge totale cumulée depuis le début</div>
+      <div class="dir-trend" id="dir-trend">📈 Calculer...</div>
+    </div>
+
+    <!-- KPI GRID -->
+    <div class="kpi-grid" id="kpi-grid"></div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="section-divider">⚡ Actions Rapides</div>
+    <div class="qa-grid">
+      <div class="qa-btn" onclick="go('stock')"><div class="qa-icon" style="background:linear-gradient(135deg,#1E40AF,#3B82F6)">📦</div><span class="qa-label">Stock</span></div>
+      <div class="qa-btn" onclick="go('ventes')"><div class="qa-icon" style="background:linear-gradient(135deg,#065F46,#059669)">💰</div><span class="qa-label">Ventes</span></div>
+      <div class="qa-btn" onclick="go('devis')"><div class="qa-icon" style="background:linear-gradient(135deg,#D97706,#F59E0B)">📄</div><span class="qa-label">Devis</span></div>
+      <div class="qa-btn" onclick="go('clients')"><div class="qa-icon" style="background:linear-gradient(135deg,#7C3AED,#8B5CF6)">👥</div><span class="qa-label">Clients</span></div>
+      <div class="qa-btn" onclick="go('msg')"><div class="qa-icon" style="background:linear-gradient(135deg,#059669,#10B981)">💬</div><span class="qa-label">Msgs</span></div>
+      <div class="qa-btn" onclick="go('catalogue')"><div class="qa-icon" style="background:linear-gradient(135deg,#DC2626,#EF4444)">📖</div><span class="qa-label">Catalogue</span></div>
+      <div class="qa-btn" onclick="go('alertes')"><div class="qa-icon" style="background:linear-gradient(135deg,#92400E,#D97706)">🔔</div><span class="qa-label">Alertes</span></div>
+      <div class="qa-btn" onclick="go('config')"><div class="qa-icon" style="background:linear-gradient(135deg,#374151,#6B7280)">⚙️</div><span class="qa-label">Config</span></div>
+    </div>
+
+    <!-- ALERTS PREVIEW -->
+    <div class="section-divider">⚠️ Alertes Prioritaires</div>
+    <div style="padding:0 14px 8px" id="dir-alerts"></div>
+
+    <!-- RECENT VENTES -->
+    <div class="section-divider">💰 Dernières Ventes</div>
+    <div class="rounded-list" id="dir-ventes"></div>
+
+    <!-- STOCK URGENTS -->
+    <div class="section-divider">⭐ Priorités Stock</div>
+    <div class="rounded-list" id="dir-stock"></div>
+
+    <!-- MONTHLY CHART SIMPLE -->
+    <div class="section-divider">📈 Ventes Mensuelles (DT)</div>
+    <div class="card" style="margin:0 14px 14px">
+      <div class="card-body" style="padding-bottom:8px">
+        <canvas id="month-chart" height="90" style="width:100%"></canvas>
+      </div>
+    </div>
+
+    <!-- PATRIMOINE -->
+    <div class="section-divider">🏛️ Patrimoine & Fond</div>
+    <div id="dir-patrimoine" style="padding:0 14px 20px"></div>
+  </div>
+
+  <!-- ══════════ SCREEN: STOCK ══════════ -->
+  <div class="screen" id="s-stock">
+    <div style="background:var(--navy);padding:14px 14px 12px">
+      <div class="search-bar" style="margin:0 0 10px;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15)">
+        <span>🔍</span>
+        <input placeholder="Rechercher un article..." id="stock-search" oninput="filterStock()" style="color:#fff;background:transparent">
+        <span style="color:rgba(255,255,255,.4);font-size:11px" id="stock-count"></span>
+      </div>
+      <div class="chips" style="padding:0;margin:0" id="stock-chips"></div>
+    </div>
+    <div id="stock-list" style="padding:10px 14px 80px"></div>
+  </div>
+
+  <!-- ══════════ SCREEN: VENTES ══════════ -->
+  <div class="screen" id="s-ventes">
+    <div style="background:var(--navy);padding:14px 14px 12px">
+      <div class="search-bar" style="margin:0 0 10px;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15)">
+        <span>🔍</span>
+        <input placeholder="Rechercher une vente..." id="ventes-search" oninput="filterVentes()" style="color:#fff;background:transparent">
+        <span style="color:rgba(255,255,255,.4);font-size:11px" id="ventes-count"></span>
+      </div>
+      <div class="chips" style="padding:0;margin:0" id="ventes-chips"></div>
+    </div>
+    <div class="stats-row" id="ventes-stats"></div>
+    <div id="ventes-list" style="padding:10px 14px 80px"></div>
+  </div>
+
+  <!-- ══════════ SCREEN: DEVIS ══════════ -->
+  <div class="screen" id="s-devis">
+    <div style="background:var(--navy);padding:16px 14px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff">📄 Devis</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5)" id="devis-subtitle">—</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost btn-sm" onclick="showDevisArchive()" style="background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.15)">📂 Archives</button>
+        <button class="btn btn-amber btn-sm" onclick="openNewDevis()">➕ Nouveau</button>
+      </div>
+    </div>
+    <div id="devis-content" style="padding:14px 14px 80px"></div>
+  </div>
+
+  <!-- ══════════ SCREEN: CLIENTS ══════════ -->
+  <div class="screen" id="s-clients">
+    <div style="background:var(--navy);padding:14px 14px 12px">
+      <div class="search-bar" style="margin:0 0 10px;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15)">
+        <span>🔍</span>
+        <input placeholder="Rechercher un client..." id="cl-search" oninput="filterClients()" style="color:#fff;background:transparent">
+        <span style="color:rgba(255,255,255,.4);font-size:11px" id="cl-count"></span>
+      </div>
+    </div>
+    <div class="stats-row" id="cl-stats"></div>
+    <div id="clients-list" style="padding:10px 14px 80px"></div>
+  </div>
+
+  <!-- ══════════ SCREEN: MESSAGERIE ══════════ -->
+  <div class="screen" id="s-msg">
+    <div style="background:var(--navy);padding:16px 14px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff">💬 Messagerie</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5)">Boîte unifiée + Clients</div>
+      </div>
+      <button class="btn btn-amber btn-sm" onclick="openNewMsg()">✏️ Nouveau</button>
+    </div>
+    <!-- Platform links -->
+    <div style="padding:10px 14px 0">
+      <div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none" id="platform-btns"></div>
+    </div>
+    <!-- Tabs: Clients / Externe -->
+    <div style="display:flex;background:var(--card);border-bottom:1px solid var(--border)">
+      <div onclick="msgTab('int')" id="mtab-int" style="flex:1;padding:11px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;border-bottom:2.5px solid var(--amber);color:var(--navy)">💬 Notes Clients</div>
+      <div onclick="msgTab('ext')" id="mtab-ext" style="flex:1;padding:11px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;border-bottom:2.5px solid transparent;color:var(--text2)">📱 Plateformes</div>
+    </div>
+    <div id="msg-list" style="padding-bottom:80px"></div>
+  </div>
+
+  <!-- ══════════ SCREEN: PLUS ══════════ -->
+  <div class="screen" id="s-plus">
+    <div style="background:var(--navy);padding:16px 14px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff">⚡ Plus</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.5)">Catalogue · IA · Config · Alertes</div>
+    </div>
+    <div style="padding:14px 14px 80px" id="plus-content"></div>
+  </div>
+
+  <!-- ══════════ SCREEN: CATALOGUE ══════════ -->
+  <div class="screen" id="s-catalogue">
+    <div style="background:var(--navy);padding:16px 14px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff">📖 Catalogue</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5)">Mis à jour depuis le stock · Sans prix</div>
+      </div>
+      <button class="btn btn-amber btn-sm" onclick="printCatalogue()">🖨️ Imprimer</button>
+    </div>
+    <div style="padding:10px 14px 80px" id="catalogue-list"></div>
+  </div>
+
+  <!-- ══════════ SCREEN: ALERTES ══════════ -->
+  <div class="screen" id="s-alertes">
+    <div style="background:var(--navy);padding:16px 14px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff">🔔 Alertes</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.5)">Articles urgents & priorités</div>
+    </div>
+    <div style="padding:10px 14px 80px" id="alertes-list"></div>
+  </div>
+
+  <!-- ══════════ SCREEN: CONFIG ══════════ -->
+  <div class="screen" id="s-config">
+    <div style="background:var(--navy);padding:16px 14px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff">⚙️ Configuration</div>
+    </div>
+    <div style="padding:14px 14px 80px" id="config-content"></div>
+  </div>
+
+  <!-- ══ SCREEN: DOCUMENTS ══ -->
+  <div class="screen" id="s-docs">
+    <div style="background:var(--navy);padding:14px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff">📄 Documents</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4)" id="docs-subtitle">Devis & Factures</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost btn-sm" onclick="openNewFac('devis')" style="background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.15)">📄 Devis</button>
+        <button class="btn btn-amber btn-sm" onclick="openNewFac('facture')">🧾 Facture</button>
+      </div>
+    </div>
+    <div style="display:flex;background:var(--card);border-bottom:1px solid var(--border)">
+      <div class="doc-subtab on" id="dtab-devis" onclick="switchDocTab('devis')">📄 Devis</div>
+      <div class="doc-subtab" id="dtab-facture" onclick="switchDocTab('facture')">🧾 Factures</div>
+    </div>
+    <div style="padding:12px 14px 80px" id="docs-list"></div>
+  </div>
+
+</div><!-- /#app -->
+
+<!-- ── BOTTOM TAB BAR ── -->
+<div class="tab-bar">
+  <div class="tab-item" id="tab-dir" onclick="go('dir')"><span class="ti">📊</span><span class="tl">Direction</span></div>
+  <div class="tab-item" id="tab-stock" onclick="go('stock')"><span class="ti">📦</span><span class="tl">Stock</span><span class="tab-badge" id="tbadge-stock" style="display:none"></span></div>
+  <div class="tab-item" id="tab-ventes" onclick="go('ventes')"><span class="ti">💰</span><span class="tl">Ventes</span></div>
+  <div class="tab-item" id="tab-docs" onclick="go('docs')"><span class="ti">📄</span><span class="tl">Docs</span></div>
+  <div class="tab-item" id="tab-msg" onclick="go('msg')"><span class="ti">💬</span><span class="tl">Msgs</span><span class="tab-badge" id="tbadge-msg" style="display:none"></span></div>
+  <div class="tab-item" id="tab-plus" onclick="go('plus')"><span class="ti">☰</span><span class="tl">Plus</span></div>
+</div>
+
+<!-- ── FAB ── -->
+<div class="fab" onclick="openAddSheet()" id="fab">➕</div>
+<!-- ── INSTALL FAB ── -->
+<div id="install-fab" onclick="installApp()" style="display:none;position:fixed;left:20px;bottom:calc(var(--tab-h) + var(--safe-bottom) + 14px);background:linear-gradient(135deg,#059669,#10B981);width:52px;height:52px;border-radius:50%;align-items:center;justify-content:center;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(5,150,105,.5);z-index:800;animation:installPulse 2s infinite">📲</div>
+<style>@keyframes installPulse{0%,100%{box-shadow:0 6px 20px rgba(5,150,105,.5)}50%{box-shadow:0 6px 30px rgba(5,150,105,.8),0 0 0 8px rgba(5,150,105,.15)}}</style>
+
+<!-- ── MODAL: GUIDE INSTALLATION ── -->
+<div class="modal-full" id="modal-install">
+  <div class="modal-top" style="background:linear-gradient(135deg,#059669,#065F46)">
+    <div onclick="closeModal('modal-install')" style="color:rgba(255,255,255,.7);font-size:22px;cursor:pointer">←</div>
+    <div>
+      <div class="modal-top-title">📲 Installer l'Application</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.5)">Guide étape par étape</div>
+    </div>
+  </div>
+  <div class="modal-scroll" style="padding:0">
+
+    <!-- MÉTHODE 1: Transfert fichier -->
+    <div style="background:linear-gradient(135deg,#1A1A2E,#0F3460);padding:20px 18px;margin-bottom:8px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#FCD34D;margin-bottom:6px">⚡ SYNERGY PARK</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.75)">Installez votre logiciel comme une <strong style="color:#6EE7B7">vraie application</strong> sur votre téléphone — <strong style="color:#FCD34D">100% gratuit</strong></div>
+    </div>
+
+    <div style="padding:18px">
+
+      <!-- ANDROID -->
+      <div style="background:#E8F5E9;border:2px solid #4CAF50;border-radius:14px;padding:16px;margin-bottom:16px">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#1B5E20;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+          <span style="background:#4CAF50;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px">🤖</span>
+          ANDROID — Chrome (Recommandé)
+        </div>
+        ${[
+          ['1️⃣','Envoyer le fichier sur votre téléphone','Envoyez-vous <strong>SynergyPark_Mobile.html</strong> par <strong>WhatsApp</strong> (à vous-même) ou <strong>Gmail</strong> ou <strong>Google Drive</strong>'],
+          ['2️⃣','Ouvrir dans Chrome','Appuyez sur le fichier reçu → choisissez <strong>Ouvrir avec Chrome</strong> (pas Firefox)'],
+          ['3️⃣','Menu Chrome','Appuyez sur les <strong>3 points ⋮</strong> en haut à droite de Chrome'],
+          ['4️⃣','Ajouter à l\'écran','Appuyez sur <strong>"Ajouter à l\'écran d\'accueil"</strong> ou <strong>"Installer l\'application"</strong>'],
+          ['5️⃣','Confirmer','Appuyez <strong>Ajouter</strong> — l\'icône ⚡ apparaît sur votre écran d\'accueil !'],
+        ].map(([n,t,d])=>`
+          <div style="display:flex;gap:12px;margin-bottom:12px;align-items:flex-start">
+            <span style="font-size:20px;flex-shrink:0;margin-top:-2px">${n}</span>
+            <div>
+              <div style="font-weight:700;font-size:13px;color:#1B5E20">${t}</div>
+              <div style="font-size:12px;color:#2E7D32;margin-top:2px;line-height:1.6">${d}</div>
+            </div>
+          </div>`).join('')}
+        <div style="background:#C8E6C9;border-radius:10px;padding:10px;margin-top:4px;font-size:12px;color:#1B5E20">
+          ✅ <strong>Résultat :</strong> L'app s'ouvre en plein écran comme une vraie application Android — sans barre de navigateur !
+        </div>
+      </div>
+
+      <!-- IPHONE -->
+      <div style="background:#E3F2FD;border:2px solid #2196F3;border-radius:14px;padding:16px;margin-bottom:16px">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#0D47A1;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+          <span style="background:#2196F3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px">🍎</span>
+          iPHONE — Safari
+        </div>
+        ${[
+          ['1️⃣','Envoyer le fichier sur iPhone','Envoyez-vous par <strong>iCloud Drive</strong> ou <strong>Gmail</strong> ou <strong>AirDrop</strong>'],
+          ['2️⃣','Ouvrir dans Safari','Ouvrez le fichier avec <strong>Safari</strong> (obligatoire, pas Chrome sur iPhone)'],
+          ['3️⃣','Bouton Partager','Appuyez sur le bouton <strong>Partager</strong> 📤 (au bas de Safari)'],
+          ['4️⃣','Sur l\'écran d\'accueil','Faites défiler → appuyez <strong>"Sur l\'écran d\'accueil"</strong>'],
+          ['5️⃣','Confirmer','Appuyez <strong>Ajouter</strong> en haut à droite ✅'],
+        ].map(([n,t,d])=>`
+          <div style="display:flex;gap:12px;margin-bottom:12px;align-items:flex-start">
+            <span style="font-size:20px;flex-shrink:0;margin-top:-2px">${n}</span>
+            <div>
+              <div style="font-weight:700;font-size:13px;color:#0D47A1">${t}</div>
+              <div style="font-size:12px;color:#1565C0;margin-top:2px;line-height:1.6">${d}</div>
+            </div>
+          </div>`).join('')}
+        <div style="background:#BBDEFB;border-radius:10px;padding:10px;margin-top:4px;font-size:12px;color:#0D47A1">
+          ✅ <strong>Résultat :</strong> L'icône ⚡ Synergy Park apparaît sur votre écran d'accueil iPhone !
+        </div>
+      </div>
+
+      <!-- COMMENT TRANSFÉRER -->
+      <div style="background:#FFF8E1;border:2px solid #FFC107;border-radius:14px;padding:16px;margin-bottom:16px">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#E65100;margin-bottom:12px">
+          📤 Comment transférer le fichier sur votre téléphone ?
+        </div>
+        ${[
+          ['💬','WhatsApp (Le plus simple)','Ouvrez WhatsApp → cherchez votre propre numéro → envoyez-vous le fichier HTML en pièce jointe'],
+          ['📧','Gmail','Ouvrez Gmail → Composer → À: votre email → joindre le fichier → Envoyer'],
+          ['📁','Google Drive','Allez sur drive.google.com → Upload → sélectionnez le fichier → ouvrez-le sur téléphone'],
+          ['🔵','Bluetooth / USB','Connectez le téléphone en USB → copiez le fichier dans le dossier Téléchargements'],
+        ].map(([i,t,d])=>`
+          <div style="display:flex;gap:12px;margin-bottom:10px;align-items:flex-start">
+            <span style="font-size:22px;flex-shrink:0">${i}</span>
+            <div><div style="font-weight:700;font-size:12px;color:#E65100">${t}</div><div style="font-size:11px;color:#BF360C;margin-top:2px;line-height:1.5">${d}</div></div>
+          </div>`).join('')}
+      </div>
+
+      <!-- VRAIE APP ANDROID -->
+      <div style="background:var(--navy);border-radius:14px;padding:18px;margin-bottom:20px">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#FCD34D;margin-bottom:12px">
+          🚀 Vraie Application Android (.apk) — 100% Gratuit
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.9">
+          <strong style="color:#6EE7B7">Étape 1 :</strong> Créez un compte sur <a href="https://github.com" target="_blank" style="color:#93C5FD">github.com</a> (gratuit)<br>
+          <strong style="color:#6EE7B7">Étape 2 :</strong> Créez un dépôt → uploadez <strong>SynergyPark_Mobile.html</strong> → renommez-le <strong>index.html</strong><br>
+          <strong style="color:#6EE7B7">Étape 3 :</strong> Settings → Pages → Branch: main → Save → votre URL est prête<br>
+          <strong style="color:#6EE7B7">Étape 4 :</strong> Allez sur <a href="https://pwabuilder.com" target="_blank" style="color:#93C5FD">pwabuilder.com</a> → entrez votre URL → <strong>Download Android Package</strong><br>
+          <strong style="color:#6EE7B7">Étape 5 :</strong> Téléchargez le <strong>.apk</strong> → installez sur Android<br>
+          <span style="color:#6EE7B7;display:block;margin-top:8px;font-weight:600">✅ Résultat : Une vraie app dans le Play Store personnel ou partageable !</span>
+        </div>
+      </div>
+
+      <button class="btn btn-green btn-full btn-lg" onclick="closeModal('modal-install')">✅ J'ai compris — Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST CONTAINER ── -->
+<div class="toast-wrap" id="toasts"></div>
+
+<!-- ════════════ MODALS / SHEETS ════════════ -->
+
+<!-- SHEET: ADD MENU -->
+<div class="overlay" id="sh-add">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">⚡ Nouvelle Action</div>
+    <div class="sheet-body" style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn btn-navy btn-full btn-lg" onclick="closeSheet('sh-add');go('stock');setTimeout(openAddStock,300)">📦 Ajouter un article au stock</button>
+      <button class="btn btn-green btn-full btn-lg" onclick="closeSheet('sh-add');openVenteSheet()">💰 Enregistrer une vente</button>
+      <button class="btn btn-amber btn-full btn-lg" onclick="closeSheet('sh-add');go('devis');setTimeout(openNewDevis,300)">📄 Créer un devis</button>
+      <button class="btn btn-outline btn-full btn-lg" onclick="closeSheet('sh-add');go('clients');setTimeout(openAddClient,300)">👥 Ajouter un client</button>
+      <button class="btn btn-ghost btn-full btn-lg" onclick="closeSheet('sh-add');openNewMsg()">💬 Envoyer un message</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHEET: STOCK ADD/EDIT -->
+<div class="overlay" id="sh-stock">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span id="sh-stock-title">📦 Nouvel article</span><span onclick="closeSheet('sh-stock')" style="cursor:pointer;color:var(--text2)">✕</span></div>
+    <div class="sheet-body">
+      <input type="hidden" id="sf-id">
+      <div class="fg"><label>Article *</label><input id="sf-art" placeholder="Description complète"></div>
+      <div class="input-row">
+        <div class="fg"><label>Catégorie</label>
+          <select id="sf-cat"><option>Réfrig. vertical vitré</option><option>Vitrine réfrig.</option><option>Vitrine glace</option><option>Congélateur horiz vitré</option><option>Congélateur vertical vitré</option><option>Four pizza</option><option>Four pâtisserie</option><option>Four</option><option>Machine café</option><option>Chauffe croissant</option><option>Comptoir sandwich</option><option>Comptoir réfrig.</option><option>Buffet réfrig.</option><option>Pétrin</option><option>Distributeur jus</option><option>Friteuse</option><option>Grillade</option><option>Mobilier</option><option>Caisse</option><option>Accessoires</option><option>Divers</option></select>
+        </div>
+        <div class="fg"><label>Statut</label>
+          <select id="sf-st"><option>✅ PRÊT</option><option>⭐ URGENT</option><option>🔵 Prioritaire</option><option>En cours</option><option>⚠ PERTE</option></select>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="fg"><label>Coût achat (DT)</label><input id="sf-cout" type="number" min="0" placeholder="0"></div>
+        <div class="fg"><label>Prix estimé (DT)</label><input id="sf-prix" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="input-row">
+        <div class="fg"><label>Date entrée</label><input id="sf-de" type="date"></div>
+        <div class="fg"><label>Avancement %</label><input id="sf-av" type="number" min="0" max="100" placeholder="80"></div>
+      </div>
+      <div class="fg"><label>Provenance</label><input id="sf-prov" placeholder="Lieu d'achat"></div>
+      <div class="fg"><label>Travaux restants</label><textarea id="sf-trav" placeholder="Travaux à faire..."></textarea></div>
+      <button class="btn btn-amber btn-full btn-lg" onclick="saveStock()" style="margin-top:4px">✅ Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHEET: VENTE ADD -->
+<div class="overlay" id="sh-vente">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span id="sh-vente-title">💰 Nouvelle Vente</span><span onclick="closeSheet('sh-vente')" style="cursor:pointer;color:var(--text2)">✕</span></div>
+    <div class="sheet-body">
+      <input type="hidden" id="vf-id">
+      <div class="fg"><label>Article *</label>
+        <select id="vf-sel" onchange="fillVenteFromStock()" style="margin-bottom:6px"><option value="">— Sélectionner depuis stock —</option></select>
+        <input id="vf-art" placeholder="Ou saisir manuellement">
+      </div>
+      <div class="fg"><label>Catégorie</label>
+        <select id="vf-cat"><option>Réfrig. vertical vitré</option><option>Vitrine réfrig.</option><option>Vitrine glace</option><option>Congélateur horiz vitré</option><option>Four pizza</option><option>Machine café</option><option>Comptoir sandwich</option><option>Accessoires</option></select>
+      </div>
+      <div class="input-row">
+        <div class="fg"><label>Coût achat (DT)</label><input id="vf-cout" type="number" min="0" placeholder="0"></div>
+        <div class="fg"><label>Prix vendu (DT) *</label><input id="vf-vendu" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="input-row">
+        <div class="fg"><label>Type</label>
+          <select id="vf-typ"><option value="C">CHR Actif</option><option value="L">Liquidation</option></select>
+        </div>
+        <div class="fg"><label>Date vente</label><input id="vf-dv" type="date"></div>
+      </div>
+      <div class="fg"><label>Acheteur / Provenance</label><input id="vf-prov" placeholder="Nom acheteur · Ville"></div>
+      <div id="vf-marge-preview" style="background:var(--card2);border-radius:10px;padding:10px;margin-bottom:12px;display:none">
+        <div style="font-size:11px;color:var(--text2)">Marge prévisionnelle</div>
+        <div class="money" id="vf-marge-val" style="font-size:22px"></div>
+      </div>
+      <button class="btn btn-green btn-full btn-lg" onclick="saveVente()">💰 Confirmer la vente</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHEET: CLIENT ADD/EDIT -->
+<div class="overlay" id="sh-client">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span id="sh-cl-title">👥 Nouveau Client</span><span onclick="closeSheet('sh-client')" style="cursor:pointer;color:var(--text2)">✕</span></div>
+    <div class="sheet-body">
+      <input type="hidden" id="clf-id">
+      <div class="input-row">
+        <div class="fg"><label>Nom *</label><input id="clf-nom" placeholder="Nom complet"></div>
+        <div class="fg"><label>Téléphone *</label><input id="clf-tel" type="tel" placeholder="+216 XX XXX XXX"></div>
+      </div>
+      <div class="input-row">
+        <div class="fg"><label>Zone / Ville</label><input id="clf-zone" placeholder="Ex: Radès, Tunis..."></div>
+        <div class="fg"><label>Nb Achats</label><input id="clf-nb" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="fg"><label>Catégories achetées</label><input id="clf-cats" placeholder="Vitrines, Fours..."></div>
+      <div class="fg"><label>Montant total payé (DT)</label><input id="clf-mont" type="number" min="0" placeholder="0"></div>
+      <div class="fg"><label>Articles achetés</label><textarea id="clf-arts" rows="2" placeholder="Liste des articles..."></textarea></div>
+      <div class="fg"><label>Note privée</label><input id="clf-note" placeholder="Infos importantes..."></div>
+      <button class="btn btn-amber btn-full btn-lg" onclick="saveClient()">✅ Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHEET: NEW MESSAGE -->
+<div class="overlay" id="sh-msg">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span>✏️ Nouveau Message</span><span onclick="closeSheet('sh-msg')" style="cursor:pointer;color:var(--text2)">✕</span></div>
+    <div class="sheet-body">
+      <div class="fg"><label>Destinataire</label>
+        <select id="mf-dest"><option value="">— Sélectionner client —</option></select>
+      </div>
+      <div class="fg"><label>Message</label><textarea id="mf-text" rows="4" placeholder="Votre message..."></textarea></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-amber btn-full btn-lg" onclick="sendMsgNote()">📩 Envoyer note</button>
+        <button class="btn btn-green btn-full btn-lg" onclick="openWhatsApp()">📱 WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FULL MODAL: DEVIS FORM -->
+<div class="modal-full" id="modal-devis">
+  <div class="modal-top">
+    <div onclick="closeModal('modal-devis')" style="color:rgba(255,255,255,.6);font-size:20px;cursor:pointer">←</div>
+    <div class="modal-top-title">📄 Créer un Devis</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-amber btn-sm" onclick="archiveCurrentDevis()">💾</button>
+      <button class="btn btn-ghost btn-sm" onclick="printDevisM()" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.15)">🖨️</button>
+    </div>
+  </div>
+  <div class="modal-scroll">
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><span class="card-title">🏢 Informations Client</span></div>
+      <div class="card-body">
+        <div class="input-row">
+          <div class="fg" style="margin-bottom:0"><label>Nom client</label><input id="dm-cnom" placeholder="Nom"></div>
+          <div class="fg" style="margin-bottom:0"><label>Téléphone</label><input id="dm-ctel" placeholder="+216..."></div>
+        </div>
+        <div class="fg" style="margin-top:10px;margin-bottom:0"><label>Adresse</label><input id="dm-cadr" placeholder="Adresse complète"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header">
+        <span class="card-title">📋 Articles</span>
+        <button class="btn btn-amber btn-sm" onclick="addDevisLine()">➕ Ligne</button>
+      </div>
+      <div id="devis-lines"></div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><span class="card-title">💰 Récapitulatif</span></div>
+      <div class="card-body">
+        <div id="devis-recap" style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--amber)">0 DT</div>
+        <div class="fg" style="margin-top:10px;margin-bottom:0"><label>Notes / Conditions</label><textarea id="dm-notes" rows="2" placeholder="Conditions, remises..."></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FULL MODAL: CHAT VIEW -->
+<div class="modal-full" id="modal-chat">
+  <div class="modal-top">
+    <div onclick="closeModal('modal-chat')" style="color:rgba(255,255,255,.6);font-size:20px;cursor:pointer">←</div>
+    <div>
+      <div class="modal-top-title" id="chat-title">—</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4)" id="chat-sub">—</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <a id="chat-wa" href="#" style="background:rgba(37,211,102,.2);color:#25D366;border:1px solid rgba(37,211,102,.3);padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;text-decoration:none" target="_blank">📱 WA</a>
+    </div>
+  </div>
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#E5DDD5;padding:14px" id="chat-messages"></div>
+  <div class="chat-input-area">
+    <input class="chat-input" id="chat-input" placeholder="Message..." onkeydown="if(event.key==='Enter')sendChat()">
+    <div class="chat-send" onclick="sendChat()">➤</div>
+  </div>
+</div>
+
+<!-- FULL MODAL: STOCK DETAIL -->
+<div class="modal-full" id="modal-stock-detail">
+  <div class="modal-top">
+    <div onclick="closeModal('modal-stock-detail')" style="color:rgba(255,255,255,.6);font-size:20px;cursor:pointer">←</div>
+    <div class="modal-top-title" id="sd-title">—</div>
+  </div>
+  <div class="modal-scroll" id="sd-body"></div>
+</div>
+
+<!-- FULL MODAL: DEVIS ARCHIVES -->
+<div class="modal-full" id="modal-arc">
+  <div class="modal-top">
+    <div onclick="closeModal('modal-arc')" style="color:rgba(255,255,255,.6);font-size:20px;cursor:pointer">←</div>
+    <div class="modal-top-title">📂 Archives Devis</div>
+  </div>
+  <div class="modal-scroll" id="arc-list"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// DATA (shared with V13 via same localStorage keys sp4_*)
+// ════════════════════════════════════════════════════════════
+const DV_DATA=[
+{id:36,art:"Four Gierre 4 étages + socle",cat:"Four",cout:3200,vendu:3500,de:"2023-01-14",dp:"2026-02-12",dv:"2026-02-15",typ:"C",prov:"Radès"},
+{id:1,art:"Cave à vin / Vitrine réfrigérée",cat:"Vitrine réfrig.",cout:600,vendu:900,de:"2023-07-15",dp:"2025-06-20",dv:"2025-06-28",typ:"L",prov:"Mourouj"},
+{id:2,art:"Pétrin Fimar 10kg",cat:"Pétrin",cout:2200,vendu:1600,de:"2023-07-15",dp:"2025-06-20",dv:"2025-07-08",typ:"L",prov:"Adel / Radès"},
+{id:3,art:"Presse double Berto's",cat:"Presse panini",cout:700,vendu:700,de:"2023-07-15",dp:"2025-06-20",dv:"2025-06-23",typ:"L",prov:"Adel / Radès"},
+{id:6,art:"Friteuse double électrique",cat:"Friteuse",cout:700,vendu:700,de:"2023-07-15",dp:"2025-06-21",dv:"2025-08-21",typ:"L",prov:"Ibn Sina"},
+{id:10,art:"Lot 20 chaises + 5 tables",cat:"Mobilier",cout:500,vendu:900,de:"2023-07-15",dp:"2025-06-23",dv:"2025-08-05",typ:"L",prov:"Fabrication propre"},
+{id:16,art:"Machine café gaz + moulin",cat:"Machine café",cout:3000,vendu:3500,de:"2023-07-15",dp:"2025-07-15",dv:"2025-07-17",typ:"C",prov:"Mégrine"},
+{id:43,art:"Vitrine de glaces Côte d'Or mauve ISA",cat:"Vitrine glace",cout:1500,vendu:2700,de:"2025-04-10",dp:"2025-05-09",dv:"2025-05-15",typ:"C",prov:"Zouhaier / Hammam Lif"},
+{id:5,art:"Congélateur horiz. vitré kitkat Everest",cat:"Congélateur horiz vitré",cout:500,vendu:850,de:"2025-04-21",dp:"2025-06-21",dv:"2025-06-26",typ:"C",prov:"Ibn Khaldoun"},
+{id:11,art:"Réfrig. vertical vitré bleu Pepsi UGUR",cat:"Réfrig. vertical vitré",cout:1600,vendu:1900,de:"2025-04-21",dp:"2025-06-24",dv:"2025-07-09",typ:"C",prov:"Ibn Khaldoun"},
+{id:18,art:"Vitrine à glace blindée inox + 15 bacs ISA",cat:"Vitrine glace",cout:1700,vendu:3500,de:"2025-06-12",dp:"2025-07-10",dv:"2025-07-15",typ:"C",prov:"Mahdia"},
+{id:29,art:"Congélateur vertical vitré jaune Palme UGUR",cat:"Congélateur vertical vitré",cout:1000,vendu:1700,de:"2025-07-17",dp:"2025-09-19",dv:"2025-10-01",typ:"C",prov:"Mohsen / Mhamdia"},
+{id:24,art:"Chauffe croissant Frigotechnique",cat:"Chauffe croissant",cout:500,vendu:750,de:"2025-08-01",dp:"2025-08-08",dv:"2025-08-09",typ:"C",prov:"Raoued"},
+{id:27,art:"Congélateur horiz. vitré 610L Novum",cat:"Congélateur horiz vitré",cout:1350,vendu:2000,de:"2025-08-14",dp:"2025-09-04",dv:"2025-09-06",typ:"C",prov:"Bardou"},
+{id:28,art:"Congélateur horiz. vitré marron UGUR",cat:"Congélateur horiz vitré",cout:700,vendu:1200,de:"2025-08-29",dp:"2025-09-05",dv:"2025-09-16",typ:"C",prov:"Radès"},
+{id:32,art:"Buffet réfrigéré pro 4 bacs",cat:"Buffet réfrig.",cout:1400,vendu:2500,de:"2025-09-07",dp:"2025-11-01",dv:"2025-12-30",typ:"C",prov:"Laouina"},
+{id:31,art:"Réfrig. mural 2m orange 2 portes",cat:"Réfrig. mural",cout:1700,vendu:2200,de:"2025-09-24",dp:"2025-11-07",dv:"2025-11-10",typ:"C",prov:"Radès"},
+{id:30,art:"Réfrig. vertical vitré Coca Cola rouge",cat:"Réfrig. vertical vitré",cout:950,vendu:1500,de:"2025-10-10",dp:"2025-10-10",dv:"2025-10-10",typ:"C",prov:"Mohsen / Mhamdia"},
+{id:40,art:"Vitrine verticale réfrig. 4 faces Frigotechnique",cat:"Vitrine réfrig.",cout:650,vendu:2150,de:"2025-11-05",dp:"2026-02-21",dv:"2026-02-22",typ:"C",prov:"Cité Tadhamon"},
+{id:25,art:"Chauffe croissant 2 Frigotechnique",cat:"Chauffe croissant",cout:500,vendu:800,de:"2026-01-01",dp:"2026-01-03",dv:"2026-01-05",typ:"C",prov:"Hammamet"},
+{id:35,art:"Congélateur vertical vitré blanc UGUR",cat:"Congélateur vertical vitré",cout:1100,vendu:1900,de:"2026-01-16",dp:"2026-01-19",dv:"2026-01-22",typ:"C",prov:"Mhamdia"},
+{id:38,art:"Congélateur horiz. vitré avec couvercle Novum",cat:"Congélateur horiz vitré",cout:800,vendu:1500,de:"2026-01-24",dp:"2026-02-14",dv:"2026-02-16",typ:"C",prov:"Fahs"},
+{id:39,art:"Vitrine Mini Réfrig. jaune twinings ISA",cat:"Vitrine réfrig.",cout:450,vendu:800,de:"2026-02-07",dp:"2026-02-15",dv:"2026-02-18",typ:"C",prov:"Mornag"},
+];
+const DS_DATA=[
+{id:32,art:"50 Bacs à glaces inox",cat:"Accessoires",cout:500,prix:1000,av:1.0,st:"✅ PRÊT",trav:"Polissage final",prov:"Divers",de:"2025-04-10"},
+{id:17,art:"Vitrine Glace Supreme Elite Mondial",cat:"Vitrine glace",cout:1800,prix:2400,av:1.0,st:"✅ PRÊT",trav:"100% opérationnel",prov:"Mahdia",de:"2025-06-12"},
+{id:19,art:"Vitrine Glace Diamand ⚠ PERTE",cat:"Vitrine glace",cout:2600,prix:2000,av:0.85,st:"⚠ PERTE",trav:"🚨 FUITE DE GAZ — vendre 2100 DT min",prov:"Tborba",de:"2025-07-17"},
+{id:16,art:"Vitrine Glace Sanson rouge/jaune FRAMEC ⭐",cat:"Vitrine glace",cout:800,prix:3500,av:0.90,st:"⭐ URGENT",trav:"Fixation + polissage → +2700 DT marge !",prov:"Korba",de:"2025-07-29"},
+{id:20,art:"Vitrine Glace Côte d'Or violet ISA",cat:"Vitrine glace",cout:800,prix:2200,av:0.60,st:"En cours",trav:"Assemblage + teinte + polissage",prov:"Naassan",de:"2025-08-11"},
+{id:2,art:"Comptoir Sandwich 1,5m importé Italie",cat:"Comptoir sandwich",cout:1500,prix:2700,av:0.90,st:"🔵 Prioritaire",trav:"Habillage complet panneaux",prov:"Montplaisir",de:"2025-08-17"},
+{id:18,art:"Vitrine Glace Côte d'Or vanille ISA ⭐",cat:"Vitrine glace",cout:1500,prix:4000,av:0.95,st:"⭐ URGENT",trav:"Fixation + polir (~1h) → +2500 DT marge !",prov:"Laouina",de:"2025-09-07"},
+{id:25,art:"Machine Café Reneka française",cat:"Machine café",cout:1500,prix:2000,av:0.95,st:"🔵 Prioritaire",trav:"Polissage général",prov:"Laouina",de:"2025-09-07"},
+{id:21,art:"Four Pizza Empero Frigotechnique #1",cat:"Four pizza",cout:1700,prix:2500,av:1.0,st:"✅ PRÊT",trav:"100% opérationnel",prov:"Montplaisir",de:"2025-11-25"},
+{id:10,art:"Congélateur horiz. vitré 1,5m Igolo UGUR",cat:"Congélateur horiz vitré",cout:700,prix:1200,av:1.0,st:"✅ PRÊT",trav:"Excellent état",prov:"Mornag",de:"2026-01-04"},
+{id:22,art:"Four Pizza Empero Frigotechnique #2",cat:"Four pizza",cout:1700,prix:2500,av:1.0,st:"✅ PRÊT",trav:"100% opérationnel",prov:"Omrane",de:"2026-01-06"},
+{id:15,art:"Vitrine Glace UGUR Frigotechnique",cat:"Vitrine glace",cout:1700,prix:2400,av:0.95,st:"🔵 Prioritaire",trav:"Teinte localisée + polissage",prov:"Bardo",de:"2026-01-07"},
+{id:24,art:"Four Pâtisserie Frigotechnique 4 étages",cat:"Four pâtisserie",cout:1700,prix:2400,av:1.0,st:"✅ PRÊT",trav:"Polissage final",prov:"Sliman",de:"2026-01-11"},
+{id:26,art:"Vitrine Chauffante COF ISA Italie",cat:"Vitrine chauffante",cout:500,prix:1000,av:1.0,st:"✅ PRÊT",trav:"Vérifier si vendue",prov:"Korba",de:"2026-01-23"},
+{id:1,art:"Comptoir Sandwich 2m frigotechnique marbre",cat:"Comptoir sandwich",cout:1300,prix:3300,av:0.90,st:"🔵 Prioritaire",trav:"Mastique + polissage final",prov:"Nabeul",de:"2026-02-16"},
+{id:29,art:"Presse Panini",cat:"Presse panini",cout:70,prix:500,av:0.90,st:"En cours",trav:"Anti-rouille + polissage",prov:"Nabeul",de:"2026-02-16"},
+{id:23,art:"Four Pizza — jamais utilisé + garantie",cat:"Four pizza",cout:1200,prix:2500,av:1.0,st:"✅ PRÊT",trav:"Jamais utilisé avec garantie",prov:"Mourouj 6",de:"2026-03-01"},
+{id:30,art:"Grillade jamais utilisée + garantie",cat:"Grillade",cout:500,prix:1000,av:1.0,st:"✅ PRÊT",trav:"Jamais utilisée",prov:"Mourouj 6",de:"2026-03-01"},
+{id:31,art:"Friteuse jamais utilisée + garantie",cat:"Friteuse",cout:500,prix:1000,av:1.0,st:"✅ PRÊT",trav:"Jamais utilisée",prov:"Mourouj 6",de:"2026-03-01"},
+{id:11,art:"Réfrig. vertical vitré Président UGUR",cat:"Réfrig. vertical vitré",cout:900,prix:1400,av:0.95,st:"🔵 Prioritaire",trav:"Remplacement socle + polissage",prov:"La Marsa",de:"2026-03-08"},
+{id:28,art:"Pétrin Fimar Italie",cat:"Pétrin",cout:1100,prix:1800,av:0.75,st:"🔵 Prioritaire",trav:"Roulement usé (pièce en commande)",prov:"La Marsa",de:"2026-03-08"},
+{id:6,art:"Congélateur horiz. vitré Sanson rouge FRAMEC",cat:"Congélateur horiz vitré",cout:900,prix:1300,av:0.80,st:"🔵 Prioritaire",trav:"Réparation + teinte + polissage",prov:"Sousse",de:"2026-03-10"},
+{id:12,art:"Réfrig. vertical vitré Perrier",cat:"Réfrig. vertical vitré",cout:850,prix:1500,av:0.90,st:"🔵 Prioritaire",trav:"Teinte intérieur + polissage",prov:"Sousse",de:"2026-03-10"},
+{id:33,art:"Congélateur horiz. vitré 1,2m Igolo UGUR",cat:"Congélateur horiz vitré",cout:630,prix:1200,av:0.90,st:"🔵 Prioritaire",trav:"Teinte localisée + polissage",prov:"Bougarnine",de:"2026-03-14"},
+{id:14,art:"Réfrig. vertical vitré mini Italie",cat:"Réfrig. vertical vitré",cout:500,prix:650,av:0.80,st:"🔵 Prioritaire",trav:"Remplacement coulisses défectueuses",prov:"Mohsen/Mhamdia",de:"2025-05-15"},
+{id:3,art:"Vitrine Réfrig. 4 faces marron doré Italie",cat:"Vitrine réfrig.",cout:1400,prix:2200,av:0.80,st:"En cours",trav:"Teinture de retouche",prov:"Lac 1",de:"2025-05-20"},
+{id:13,art:"Réfrig. vertical vitré Kleo turc",cat:"Réfrig. vertical vitré",cout:1000,prix:1500,av:0.80,st:"🔵 Prioritaire",trav:"Habillage panneaux, teinte, polissage",prov:"Cité El Wahat",de:"2025-06-11"},
+{id:8,art:"Congélateur horiz. vitré blanc et bleu",cat:"Congélateur horiz vitré",cout:600,prix:900,av:0.70,st:"En cours",trav:"Habillage + harmonisation",prov:"Yasminette",de:"2025-10-04"},
+{id:9,art:"Congélateur horiz. vitré double étage",cat:"Congélateur horiz vitré",cout:750,prix:1500,av:0.85,st:"🔵 Prioritaire",trav:"Habillage complet panneaux",prov:"Manouba",de:"2025-11-12"},
+{id:4,art:"Vitrine Réfrig. 4 faces blanche Horeca Allemagne",cat:"Vitrine réfrig.",cout:1550,prix:2400,av:0.80,st:"En cours",trav:"Retouche chromatique",prov:"Sfax",de:"2026-03-06"},
+{id:5,art:"Congélateur horiz. vitré 750L Bonnet",cat:"Congélateur horiz vitré",cout:1600,prix:2200,av:0.70,st:"En cours",trav:"Mastique + teinte + polissage",prov:"Sfax",de:"2026-03-06"},
+{id:27,art:"Distributeur Jus Italie",cat:"Distributeur jus",cout:500,prix:1000,av:0.75,st:"En cours",trav:"Recherche couvercles + polissage",prov:"Mourouj 3",de:"2025-10-30"},
+{id:7,art:"Congélateur horiz. vitré Bindi Italie",cat:"Congélateur horiz vitré",cout:500,prix:900,av:0.70,st:"En cours",trav:"Habillage panneaux + teinte",prov:"Mourouj 6",de:"2025-10-19"},
+];
+const DC_DATA=[
+{id:1,nom:"Mohsen",zone:"Mhamdia",tel:"+216 50 XXX XXX",cats:"Congélateurs vitrés · Vitrines",nb:5,mont:9600,date:"2026-02-15",arts:"Plusieurs congélateurs + vitrine ISA",note:"Client VIP — priorité absolue. Livraison à Mhamdia."},
+{id:2,nom:"Adel",zone:"Radès",tel:"+216 XX XXX XXX",cats:"Comptoirs · Pétrins · Grillades",nb:6,mont:7600,date:"2025-09-01",arts:"2× comptoirs + pétrin + grillade + gaz + presse",note:"Partenaire fidèle. Reprend régulièrement."},
+{id:3,nom:"Zouhaier",zone:"Hammam Lif",tel:"+216 XX XXX XXX",cats:"Vitrines glace ISA",nb:2,mont:3800,date:"2025-08-01",arts:"Vitrine mauve ISA + congélateur noir UGUR",note:"Spécialiste glacé. Bonne marge ISA."},
+{id:4,nom:"Client Mahdia",zone:"Mahdia",tel:"+216 XX XXX XXX",cats:"Vitrines glace ISA",nb:2,mont:3400,date:"2025-07-15",arts:"ISA blindée + 15 bacs · Supreme Elite",note:"Région côtière — forte demande estivale."},
+];
+const DC2_DEFAULT={loyer:750,mois:4,caution:750,internet:80,gasoil:300,entretien:80,outillage:200,voiture_cout:16000,voiture_revente:14000,fond_mur:7000,fond_travaux:40000,fond_vente:45000,fond_encaisse:30000,fond_creance:15000,fb:'',ig:'',tk:'',wa:'+21620910909'};
+
+// ── STORAGE ──
+const LD=(k,d)=>{try{const v=localStorage.getItem('sp4_'+k);return v?JSON.parse(v):d;}catch{return d;}};
+const SV=(k,v)=>{try{localStorage.setItem('sp4_'+k,JSON.stringify(v));}catch{}};
+let VD=LD('v',DV_DATA), SD=LD('s',DS_DATA), CL=LD('c',DC_DATA), CF=LD('cfg',DC2_DEFAULT);
+let nV=LD('nv',200), nS=LD('ns',200), nC=LD('nc',20), devisData=LD('devis',[]);
+let msgNotes=LD('msgnotes',{}); // {clientId: [{text, time, out}]}
+const SA=()=>{SV('v',VD);SV('s',SD);SV('c',CL);SV('cfg',CF);SV('nv',nV);SV('ns',nS);SV('nc',nC);SV('devis',devisData);SV('msgnotes',msgNotes);};
+
+// ── UTILS ──
+const fm=n=>new Intl.NumberFormat('fr-TN').format(Math.round(n))+' DT';
+const fd=d=>d?new Date(d+'T00:00').toLocaleDateString('fr-FR'):'—';
+const dd=(a,b)=>a&&b?Math.round((new Date(b)-new Date(a))/864e5):null;
+const td=()=>new Date().toISOString().slice(0,10);
+const tc=()=>new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+const BST={'✅ PRÊT':'b-pret','⭐ URGENT':'b-urg','🔵 Prioritaire':'b-pri','En cours':'b-cours','⚠ PERTE':'b-perte'};
+function catCode(cat,id){const m={'vitrine glace':'R-VG','vitrine réfrig':'R-VR','vitrine chauffante':'C-VC','congélateur horiz':'R-CH','congélateur vertical':'R-CV','réfrig. vertical':'R-FV','réfrig. mural':'R-RM','buffet réfrig':'R-BF','four pizza':'C-FP','four pâtisserie':'C-FT','four':'C-FG','pétrin':'C-PT','machine café':'B-MC','chauffe croissant':'B-CC','distributeur':'B-DJ','comptoir sandwich':'B-CS','comptoir réfrig':'B-CR','presse panini':'B-PP','hotte':'C-HT','friteuse':'C-FI','grillade':'C-GR','mobilier':'M-MB','caisse':'B-CA','accessoires':'A-AC'};const cl=(cat||'').toLowerCase();let code='D-DI';for(const[k,v]of Object.entries(m))if(cl.includes(k)){code=v;break;}return id!=null?`${code}-${String(id).padStart(3,'0')}`:code;}
+function showToast(msg,type=''){const t=document.createElement('div');t.className='toast '+(type||'');t.textContent=msg;const w=document.getElementById('toasts');w.appendChild(t);setTimeout(()=>t.remove(),2800);}
+function colorAvatar(name){const colors=['#1E40AF','#065F46','#7C3AED','#D97706','#DC2626','#0F766E'];let h=0;for(const c of name)h+=c.charCodeAt(0);return colors[h%colors.length];}
+const initials=s=>(s||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+
+// ── NAVIGATION V3 — Multi-back + Double-tap exit ──────────
+let currentScreen='dir', navHist=[], _isBack=false, backPressCount=0, bpTimer=null;
+const SCREENS={dir:'s-dir',stock:'s-stock',ventes:'s-ventes',docs:'s-docs',clients:'s-clients',msg:'s-msg',plus:'s-plus',catalogue:'s-catalogue',alertes:'s-alertes',config:'s-config'};
+const TAB_MAP={dir:'tab-dir',stock:'tab-stock',ventes:'tab-ventes',docs:'tab-docs',msg:'tab-msg',plus:'tab-plus',clients:'tab-plus',catalogue:'tab-plus',alertes:'tab-plus',config:'tab-plus'};
+const RENDERERS={dir:rDir,stock:rStock,ventes:rVentes,docs:rDocs,clients:rClients,msg:rMsg,plus:rPlus,catalogue:rCatalogue,alertes:rAlertes,config:rConfig};
+const MAIN_TABS=['dir','stock','ventes','docs','msg','plus'];
+
+function go(name){
+  if(!SCREENS[name])return;
+  playClick();
+  if(!_isBack&&currentScreen&&currentScreen!==name){navHist.push(currentScreen);if(navHist.length>25)navHist=navHist.slice(-25);}
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const pg=document.getElementById(SCREENS[name]);if(pg)pg.classList.add('active');
+  document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
+  const tab=document.getElementById(TAB_MAP[name]);if(tab)tab.classList.add('active');
+  // FAB
+  const fab=document.getElementById('fab');
+  if(name==='clients'){fab.style.display='flex';fab.onclick=openAddClient;fab.textContent='👤';}
+  else if(name==='msg'){fab.style.display='flex';fab.onclick=openNewMsg;fab.textContent='✏️';}
+  else if(['dir','stock','ventes'].includes(name)){fab.style.display='flex';fab.onclick=openAddSheet;fab.textContent='➕';}
+  else fab.style.display='none';
+  currentScreen=name;
+  document.getElementById('app').scrollTo(0,0);
+  if(RENDERERS[name])RENDERERS[name]();
+  updateBadges();
+}
+function goBack(){
+  playClick();
+  // 1. Close any full modal
+  const mfull=document.querySelector('.mfull.on');if(mfull){mfull.classList.remove('on');return;}
+  // 2. Close any sheet
+  const sheet=document.querySelector('.overlay.on');if(sheet){sheet.classList.remove('on');return;}
+  // 3. Go back in nav history
+  if(navHist.length>0){_isBack=true;const prev=navHist.pop();go(prev);_isBack=false;return;}
+  // 4. Double-tap exit
+  backPressCount++;
+  if(backPressCount===1){showToast('Appuyez encore pour quitter ⚡');bpTimer=setTimeout(()=>backPressCount=0,2500);}
+  else{clearTimeout(bpTimer);backPressCount=0;document.getElementById('dlg-exit')?.classList.add('on');}
+}
+// Android back button support
+window.addEventListener('popstate',()=>{history.pushState(null,'',location.href);goBack();});
+history.pushState(null,'',location.href);
+
+// ── DIRECTION GÉNÉRALE ────────────────────────────────────
+function rDir(){
+  const now=new Date();
+  document.getElementById('dir-date').textContent=now.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const totalMarge=VD.reduce((a,v)=>a+(v.vendu-v.cout),0);
+  const totalCHR=VD.filter(v=>v.typ==='C').reduce((a,v)=>a+(v.vendu-v.cout),0);
+  const skCout=SD.reduce((a,s)=>a+s.cout,0);
+  const skPrix=SD.reduce((a,s)=>a+s.prix,0);
+  const pretsCount=SD.filter(s=>s.st==='✅ PRÊT').length;
+  const urgCount=SD.filter(s=>s.st==='⭐ URGENT').length;
+  const thisM=now.toISOString().slice(0,7);
+  const mVentes=VD.filter(v=>v.dv&&v.dv.startsWith(thisM));
+  const mMarge=mVentes.reduce((a,v)=>a+(v.vendu-v.cout),0);
+  document.getElementById('dir-marge').textContent=fm(totalMarge);
+  const pct=totalCHR>0?Math.round(totalCHR/totalMarge*100):0;
+  document.getElementById('dir-trend').innerHTML=`📈 CHR: ${pct}% · Ce mois: ${fm(mMarge)}`;
+
+  // KPI Grid
+  document.getElementById('kpi-grid').innerHTML=`
+    <div class="kpi-card kpi-amber" onclick="go('stock')"><div class="kpi-icon">📦</div>
+      <div class="kpi-val">${SD.length}</div><div class="kpi-lbl">Articles stock</div>
+      <div class="kpi-sub">${fm(skCout)} immob. · ${fm(skPrix)} potentiel</div></div>
+    <div class="kpi-card kpi-green" onclick="go('ventes')"><div class="kpi-icon">💰</div>
+      <div class="kpi-val">${VD.length}</div><div class="kpi-lbl">Ventes totales</div>
+      <div class="kpi-sub">CHR: ${VD.filter(v=>v.typ==='C').length} · LIQ: ${VD.filter(v=>v.typ==='L').length}</div></div>
+    <div class="kpi-card kpi-blue" onclick="go('clients')"><div class="kpi-icon">👥</div>
+      <div class="kpi-val">${CL.length}</div><div class="kpi-lbl">Clients actifs</div>
+      <div class="kpi-sub">${fm(CL.reduce((a,c)=>a+(c.mont||0),0))} encaissé</div></div>
+    <div class="kpi-card kpi-red"><div class="kpi-icon">⭐</div>
+      <div class="kpi-val">${urgCount+pretsCount}</div><div class="kpi-lbl">Urgents + Prêts</div>
+      <div class="kpi-sub">${urgCount} urgents · ${pretsCount} prêts à vendre</div></div>
+    <div class="kpi-card kpi-wide" onclick="go('ventes')"><div class="kpi-icon">📅</div>
+      <div class="kpi-val">+${fm(mMarge)}</div><div class="kpi-lbl">Marge ce mois · ${mVentes.length} ventes en ${now.toLocaleDateString('fr-FR',{month:'long'})}</div></div>`;
+
+  // Alerts preview
+  const alerts=[];
+  SD.forEach(s=>{const j=dd(s.de,td());
+    if(j&&j>90)alerts.push({lvl:'🚨',col:'var(--red)',msg:`${s.art} — ${j}j en stock (republier !)`});
+    else if(s.st==='⭐ URGENT')alerts.push({lvl:'⭐',col:'var(--amber)',msg:`${s.art} — URGENT: ${s.trav}`});
+    else if(s.st==='⚠ PERTE')alerts.push({lvl:'📉',col:'var(--red)',msg:`${s.art} — EN PERTE`});
+  });
+  if(CF.fond_creance>0)alerts.push({lvl:'💰',col:'var(--amber)',msg:`Créance fond : ${fm(CF.fond_creance)} non encaissés`});
+  document.getElementById('alert-dot').style.display=alerts.length?'block':'none';
+  document.getElementById('tbadge-stock').textContent=alerts.length;
+  document.getElementById('tbadge-stock').style.display=alerts.length?'flex':'none';
+  document.getElementById('dir-alerts').innerHTML=alerts.slice(0,3).map(a=>`
+    <div class="alert-strip warn" style="border-color:${a.col}20;background:${a.col}10;margin-bottom:8px">
+      <span style="font-size:18px">${a.lvl}</span>
+      <span class="al-text">${a.msg}</span>
+    </div>`).join('')+(alerts.length===0?'<div class="alert-strip ok"><span>✅</span><span class="al-text"><strong>Tout est OK</strong> — aucune alerte critique</span></div>':'');
+
+  // Recent ventes
+  const recV=VD.slice().sort((a,b)=>(b.dv||'').localeCompare(a.dv||'')).slice(0,5);
+  document.getElementById('dir-ventes').innerHTML=recV.map(v=>{const mg=v.vendu-v.cout;return`
+    <div class="list-item">
+      <div class="li-icon" style="background:${mg>=0?'var(--green2)':'var(--red2)'}">${mg>=0?'💰':'📉'}</div>
+      <div class="li-main"><div class="li-name">${v.art}</div><div class="li-sub">${fd(v.dv)} · ${v.prov||'—'}</div></div>
+      <div class="li-right"><div class="li-val" style="color:${mg>=0?'var(--green)':'var(--red)'}">${mg>=0?'+':''}${fm(mg)}</div><div class="li-meta">${fm(v.vendu)}</div></div>
+    </div>`}).join('');
+
+  // Stock urgents
+  const urgS=SD.filter(s=>['⭐ URGENT','✅ PRÊT'].includes(s.st)).slice(0,5);
+  document.getElementById('dir-stock').innerHTML=urgS.map(s=>`
+    <div class="list-item" onclick="openStockDetail(${s.id})">
+      <div class="li-icon" style="background:var(--amber4)">📦</div>
+      <div class="li-main"><div class="li-name">${s.art}</div><div class="li-sub">${s.trav||s.cat}</div></div>
+      <div class="li-right"><span class="badge ${BST[s.st]||'b-cours'}">${s.st}</span><div class="li-meta">${fm(s.prix)}</div></div>
+    </div>`).join('');
+
+  // Monthly chart
+  drawMonthChart();
+
+  // Patrimoine
+  const fondTotal=CF.fond_mur+CF.fond_travaux+CF.fond_vente;
+  document.getElementById('dir-patrimoine').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="card"><div class="card-body">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:4px;font-weight:600">FOND TOTAL INVESTI</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--navy)">${fm(fondTotal)}</div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:4px;font-weight:600">ENCAISSÉ</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--green)">${fm(CF.fond_encaisse||0)}</div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:4px;font-weight:600">CRÉANCE</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--red)">${fm(CF.fond_creance||0)}</div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:4px;font-weight:600">STOCK POTENTIEL</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--blue)">${fm(skPrix)}</div>
+      </div></div>
+    </div>`;
+}
+
+function drawMonthChart(){
+  const canvas=document.getElementById('month-chart');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.parentElement.clientWidth-28;
+  canvas.width=W*2;canvas.height=180;canvas.style.width=W+'px';canvas.style.height='90px';
+  ctx.scale(2,2);
+  const months={};
+  VD.forEach(v=>{if(!v.dv)return;const k=v.dv.slice(0,7);if(!months[k])months[k]={m:0,n:0};months[k].m+=v.vendu-v.cout;months[k].n++;});
+  const keys=Object.keys(months).sort().slice(-7);
+  if(!keys.length){ctx.fillStyle='#ccc';ctx.font='12px Poppins';ctx.fillText('Aucune donnée',W/2-40,45);return;}
+  const vals=keys.map(k=>months[k].m);
+  const mx=Math.max(...vals,1);
+  const bW=(W-20)/keys.length;
+  const pH=70;
+  keys.forEach((k,i)=>{
+    const h=Math.max((vals[i]/mx)*pH,2);
+    const x=10+i*bW+bW*.15;
+    const bwi=bW*.7;
+    const mg=vals[i];
+    const col=mg>=0?'#059669':'#DC2626';
+    const grd=ctx.createLinearGradient(0,pH-h+10,0,pH+10);
+    grd.addColorStop(0,col);grd.addColorStop(1,col+'66');
+    ctx.fillStyle=grd;
+    ctx.beginPath();ctx.roundRect(x,pH-h+10,bwi,h,3);ctx.fill();
+    ctx.fillStyle='#78716C';ctx.font='bold 7px Poppins';ctx.textAlign='center';
+    ctx.fillText(k.slice(5),x+bwi/2,pH+22);
+    ctx.fillStyle=col;ctx.font='bold 7px Poppins';
+    ctx.fillText((mg/1000).toFixed(1)+'k',x+bwi/2,pH-h+7);
+  });
+}
+
+// ── STOCK ─────────────────────────────────────────────────
+let stockFilter='all';
+function rStock(){
+  renderStockChips();
+  filterStock();
+}
+function renderStockChips(){
+  const cats=['all','✅ PRÊT','⭐ URGENT','🔵 Prioritaire','En cours','⚠ PERTE'];
+  document.getElementById('stock-chips').innerHTML=cats.map(c=>`
+    <div class="chip ${stockFilter===c?'on':''}" onclick="stockFilter='${c}';filterStock()">${c==='all'?'Tous':c}</div>`).join('');
+}
+function filterStock(){
+  const q=(document.getElementById('stock-search')?.value||'').toLowerCase();
+  let d=[...SD];
+  if(stockFilter!=='all')d=d.filter(s=>s.st===stockFilter);
+  if(q)d=d.filter(s=>s.art.toLowerCase().includes(q)||s.cat.toLowerCase().includes(q)||(s.prov||'').toLowerCase().includes(q));
+  document.getElementById('stock-count').textContent=`${d.length}`;
+  document.getElementById('stock-list').innerHTML=d.length?d.map(s=>buildStockCard(s)).join(''):`
+    <div class="empty-state"><span class="icon">📦</span><p>Aucun article trouvé</p></div>`;
+}
+function buildStockCard(s){
+  const avp=Math.round((s.av||0.5)*100);
+  const mg=s.prix-s.cout;
+  const code=catCode(s.cat,s.id);
+  const agj=dd(s.de,td());
+  const agCol=agj>90?'var(--red)':agj>45?'var(--amber)':'var(--green)';
+  return`<div class="stock-card">
+    <div class="stock-card-head" onclick="openStockDetail(${s.id})">
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap">
+          <span class="stock-card-code">${code}</span>
+          <span class="badge ${BST[s.st]||'b-cours'}">${s.st}</span>
+          ${agj!==null?`<span style="font-size:10px;color:${agCol};font-weight:600">${agj}j</span>`:''}
+        </div>
+        <div class="stock-card-name">${s.art}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:3px">📍 ${s.prov||'—'} · ${fd(s.de)}</div>
+      </div>
+    </div>
+    <div class="stock-card-body">
+      <div style="flex:1;min-width:120px">
+        <div class="prog"><div class="prog-fill" style="width:${avp}%"></div></div>
+        <div style="font-size:10px;color:var(--text2)">Avancement : ${avp}%</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--navy)">${fm(s.prix)}</div>
+        <div style="font-size:10px;color:var(--green);font-weight:600">+${fm(mg)} marge</div>
+      </div>
+    </div>
+    ${s.trav?`<div style="padding:0 14px 10px;font-size:11px;color:var(--text2)">🔧 ${s.trav}</div>`:''}
+    <div class="stock-card-actions">
+      <button class="btn btn-green btn-sm" style="flex:1" onclick="openSellFromStock(${s.id})">💰 Vendre</button>
+      <button class="btn btn-amber btn-sm" style="flex:1" onclick="openEditStock(${s.id})">✏️ Modifier</button>
+      <button class="btn btn-ghost btn-sm" onclick="deleteStock(${s.id})">🗑</button>
+    </div>
+  </div>`;
+}
+function openStockDetail(id){
+  const s=SD.find(x=>x.id===id);if(!s)return;
+  document.getElementById('sd-title').textContent=catCode(s.cat,s.id);
+  const mg=s.prix-s.cout;
+  document.getElementById('sd-body').innerHTML=`
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-body">
+        <div style="font-weight:700;font-size:16px;color:var(--navy);margin-bottom:10px">${s.art}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          <span class="badge ${BST[s.st]||'b-cours'}">${s.st}</span>
+          <span style="background:var(--amber4);color:var(--amber);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700">${s.cat}</span>
+        </div>
+        <div class="prog" style="height:8px;margin-bottom:8px"><div class="prog-fill" style="width:${Math.round((s.av||.5)*100)}%"></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center">
+          <div style="background:var(--card2);border-radius:10px;padding:10px">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text2)">${fm(s.cout)}</div>
+            <div style="font-size:9px;color:var(--text3);font-weight:600">COÛT</div>
+          </div>
+          <div style="background:var(--card2);border-radius:10px;padding:10px">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--navy)">${fm(s.prix)}</div>
+            <div style="font-size:9px;color:var(--text3);font-weight:600">PRIX</div>
+          </div>
+          <div style="background:${mg>=0?'var(--green2)':'var(--red2)'};border-radius:10px;padding:10px">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:${mg>=0?'var(--green)':'var(--red)'}">${mg>=0?'+':''}${fm(mg)}</div>
+            <div style="font-size:9px;color:var(--text3);font-weight:600">MARGE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-body">
+        <div style="font-size:12px;line-height:1.8">
+          <div>📍 <strong>Provenance :</strong> ${s.prov||'—'}</div>
+          <div>📅 <strong>Date entrée :</strong> ${fd(s.de)}</div>
+          <div>⏱ <strong>Jours en stock :</strong> ${dd(s.de,td())??'—'}j</div>
+          ${s.trav?`<div style="margin-top:8px;background:var(--amber4);border-radius:8px;padding:8px;border-left:3px solid var(--amber)">🔧 ${s.trav}</div>`:''}
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-green btn-full btn-lg" onclick="openSellFromStock(${s.id});closeModal('modal-stock-detail')">💰 Vendre cet article</button>
+    <button class="btn btn-amber btn-full btn-lg" style="margin-top:8px" onclick="openEditStock(${s.id});closeModal('modal-stock-detail')">✏️ Modifier</button>`;
+  document.getElementById('modal-stock-detail').classList.add('open');
+}
+function openAddStock(){
+  document.getElementById('sh-stock-title').textContent='📦 Nouvel article';
+  document.getElementById('sf-id').value='';
+  ['sf-art','sf-cout','sf-prix','sf-av','sf-prov','sf-trav'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('sf-de').value=td();
+  openSheet('sh-stock');
+}
+function openEditStock(id){
+  const s=SD.find(x=>x.id===id);if(!s)return;
+  document.getElementById('sh-stock-title').textContent='✏️ Modifier article';
+  document.getElementById('sf-id').value=id;
+  document.getElementById('sf-art').value=s.art;
+  document.getElementById('sf-cat').value=s.cat;
+  document.getElementById('sf-st').value=s.st;
+  document.getElementById('sf-cout').value=s.cout;
+  document.getElementById('sf-prix').value=s.prix;
+  document.getElementById('sf-av').value=Math.round((s.av||.5)*100);
+  document.getElementById('sf-de').value=s.de||td();
+  document.getElementById('sf-prov').value=s.prov||'';
+  document.getElementById('sf-trav').value=s.trav||'';
+  openSheet('sh-stock');
+}
+function saveStock(){
+  const id=document.getElementById('sf-id').value;
+  const art=document.getElementById('sf-art').value.trim();
+  if(!art){showToast('Article obligatoire !','red');return;}
+  const data={art,cat:document.getElementById('sf-cat').value,st:document.getElementById('sf-st').value,
+    cout:+document.getElementById('sf-cout').value||0,prix:+document.getElementById('sf-prix').value||0,
+    av:(+document.getElementById('sf-av').value||80)/100,de:document.getElementById('sf-de').value,
+    prov:document.getElementById('sf-prov').value,trav:document.getElementById('sf-trav').value};
+  if(id){const i=SD.findIndex(x=>x.id==id);if(i>=0)SD[i]={...SD[i],...data};}
+  else{data.id=nS++;SD.push(data);}
+  SA();closeSheet('sh-stock');filterStock();showToast(`✅ Article ${id?'modifié':'ajouté'} : ${art}`,'green');
+}
+function deleteStock(id){if(!confirm('Supprimer cet article ?'))return;SD=SD.filter(x=>x.id!==id);SA();filterStock();showToast('🗑 Article supprimé');}
+function openSellFromStock(id){
+  const s=SD.find(x=>x.id===id);if(!s)return;
+  document.getElementById('vf-id').value=id;
+  document.getElementById('vf-art').value=s.art;
+  document.getElementById('vf-cat').value=s.cat;
+  document.getElementById('vf-cout').value=s.cout;
+  document.getElementById('vf-vendu').value=s.prix;
+  document.getElementById('vf-dv').value=td();
+  document.getElementById('sh-vente-title').textContent='💰 Vendre : '+s.art.slice(0,25)+'...';
+  updateMargePreview();
+  openSheet('sh-vente');
+}
+
+// ── VENTES ────────────────────────────────────────────────
+let ventesFilter='all';
+function rVentes(){
+  const typChips=['all','CHR','LIQ'];
+  document.getElementById('ventes-chips').innerHTML=typChips.map(c=>`
+    <div class="chip ${ventesFilter===c?'on':''}" onclick="ventesFilter='${c}';filterVentes()">${c==='all'?'Toutes':c}</div>`).join('');
+  filterVentes();
+  // Stats
+  const tv=VD.reduce((a,v)=>a+v.vendu,0);
+  const tc=VD.reduce((a,v)=>a+v.cout,0);
+  const mg=tv-tc;
+  document.getElementById('ventes-stats').innerHTML=`
+    <div class="stat-cell"><div class="stat-val">${VD.length}</div><div class="stat-lbl">Ventes</div></div>
+    <div class="stat-cell"><div class="stat-val" style="color:var(--green)">${fm(mg)}</div><div class="stat-lbl">Marge</div></div>
+    <div class="stat-cell"><div class="stat-val" style="color:var(--blue)">${fm(tv)}</div><div class="stat-lbl">CA Total</div></div>`;
+}
+function filterVentes(){
+  const q=(document.getElementById('ventes-search')?.value||'').toLowerCase();
+  let d=[...VD].sort((a,b)=>(b.dv||'').localeCompare(a.dv||''));
+  if(ventesFilter==='CHR')d=d.filter(v=>v.typ==='C');
+  if(ventesFilter==='LIQ')d=d.filter(v=>v.typ==='L');
+  if(q)d=d.filter(v=>v.art.toLowerCase().includes(q)||(v.prov||'').toLowerCase().includes(q));
+  document.getElementById('ventes-count').textContent=`${d.length}`;
+  document.getElementById('ventes-list').innerHTML=d.length?d.map(v=>{const mg=v.vendu-v.cout;return`
+    <div class="list-item" style="margin-bottom:2px">
+      <div class="li-icon" style="background:${mg>=0?'var(--green2)':'var(--red2)'};color:${mg>=0?'var(--green)':'var(--red)'}">
+        ${mg>=0?'💰':'📉'}</div>
+      <div class="li-main">
+        <div class="li-name">${v.art}</div>
+        <div class="li-sub">${fd(v.dv)} · ${v.prov||'—'} · <span class="badge ${v.typ==='C'?'b-chr':'b-liq'}" style="font-size:9px">${v.typ==='C'?'CHR':'LIQ'}</span></div>
+      </div>
+      <div class="li-right">
+        <div class="li-val" style="color:${mg>=0?'var(--green)':'var(--red)'}">${mg>=0?'+':''}${fm(mg)}</div>
+        <div class="li-meta">${fm(v.vendu)}</div>
+      </div>
+    </div>`}).join(''):`<div class="empty-state"><span class="icon">💰</span><p>Aucune vente trouvée</p></div>`;
+}
+function openVenteSheet(){
+  document.getElementById('vf-id').value='';
+  ['vf-art','vf-cout','vf-vendu','vf-prov'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('vf-dv').value=td();
+  document.getElementById('sh-vente-title').textContent='💰 Nouvelle Vente';
+  // Populate stock select
+  const sel=document.getElementById('vf-sel');
+  sel.innerHTML='<option value="">— Sélectionner depuis stock —</option>'+SD.map(s=>`<option value="${s.id}">${s.art}</option>`).join('');
+  openSheet('sh-vente');
+}
+function fillVenteFromStock(){
+  const id=+document.getElementById('vf-sel').value;if(!id)return;
+  const s=SD.find(x=>x.id===id);if(!s)return;
+  document.getElementById('vf-art').value=s.art;
+  document.getElementById('vf-cat').value=s.cat;
+  document.getElementById('vf-cout').value=s.cout;
+  document.getElementById('vf-vendu').value=s.prix;
+  updateMargePreview();
+}
+function updateMargePreview(){
+  const cout=+document.getElementById('vf-cout').value||0;
+  const vendu=+document.getElementById('vf-vendu').value||0;
+  if(!cout&&!vendu){document.getElementById('vf-marge-preview').style.display='none';return;}
+  const mg=vendu-cout;
+  document.getElementById('vf-marge-preview').style.display='block';
+  const el=document.getElementById('vf-marge-val');
+  el.textContent=(mg>=0?'+':'')+fm(mg);
+  el.className='money '+(mg>=0?'pos':'neg');
+}
+document.getElementById('vf-vendu')?.addEventListener('input',updateMargePreview);
+document.getElementById('vf-cout')?.addEventListener('input',updateMargePreview);
+function saveVente(){
+  const art=document.getElementById('vf-art').value.trim();
+  const vendu=+document.getElementById('vf-vendu').value;
+  if(!art||!vendu){showToast('Article et prix obligatoires !','red');return;}
+  const stockId=+document.getElementById('vf-id').value;
+  const data={id:nV++,art,cat:document.getElementById('vf-cat').value,cout:+document.getElementById('vf-cout').value||0,
+    vendu,typ:document.getElementById('vf-typ').value,de:td(),dp:td(),dv:document.getElementById('vf-dv').value,
+    prov:document.getElementById('vf-prov').value};
+  VD.push(data);
+  // Remove from stock
+  if(stockId){SD=SD.filter(x=>x.id!==stockId);}
+  // Auto-add client
+  const prov=document.getElementById('vf-prov').value;
+  if(prov)autoAddClient(prov,art,vendu);
+  SA();closeSheet('sh-vente');filterVentes();filterStock();rDir();
+  showToast(`✅ Vente enregistrée ! +${fm(data.vendu-data.cout)}`,'green');
+}
+function autoAddClient(prov,artName,prix){
+  const nom=prov.trim().split('/')[0].trim();
+  const zone=prov.includes('/')?prov.split('/').slice(1).join('/').trim():'—';
+  const existing=CL.find(c=>c.nom.toLowerCase()===nom.toLowerCase());
+  if(existing){existing.nb=(existing.nb||0)+1;existing.mont=(existing.mont||0)+prix;existing.date=td();existing.arts=existing.arts?existing.arts+' · '+artName:artName;showToast(`👤 ${nom} mis à jour (${existing.nb} achats)`,'green');}
+  else{CL.push({id:nC++,nom,zone,tel:'—',cats:artName,nb:1,mont:prix,date:td(),arts:artName,note:'Ajouté auto'});showToast(`👤 Nouveau client : ${nom}`,'green');}
+  SA();
+}
+
+// ── DEVIS ─────────────────────────────────────────────────
+let devisLines=[],devisNum=LD('dnum',1);
+function rDevis(){
+  document.getElementById('devis-subtitle').textContent=`${devisData.length} archivé${devisData.length>1?'s':''} · N°${devisNum}`;
+  document.getElementById('devis-content').innerHTML=`
+    <div class="alert-strip ok"><span>📄</span><span class="al-text"><strong>Créez un devis</strong> en cliquant "➕ Nouveau" — archivez-le en PDF ou imprimez-le directement.</span></div>
+    ${devisData.length?'<div class="section-divider">📂 Derniers devis</div>'+devisData.slice().reverse().slice(0,5).map(a=>`
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-body" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <div>
+            <div style="font-weight:700;font-size:13px;color:var(--navy)">N°${String(a.num).padStart(4,'0')} · ${a.type}</div>
+            <div style="font-size:11px;color:var(--text2)">${fd(a.date)} · ${a.client}</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--amber)">${fm(a.total)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button class="btn btn-amber btn-sm" onclick="printArchivedDevis(${a.id})">🖨️ PDF</button>
+            <button class="btn btn-ghost btn-sm" onclick="deleteArchivedDevis(${a.id})">🗑</button>
+          </div>
+        </div>
+      </div>`).join(''):''}`;
+}
+function openNewDevis(){
+  devisLines=[];
+  ['dm-cnom','dm-ctel','dm-cadr','dm-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  renderDevisLines();
+  document.getElementById('modal-devis').classList.add('open');
+}
+function addDevisLine(){
+  devisLines.push({art:'',qte:1,pu:0});
+  renderDevisLines();
+}
+function renderDevisLines(){
+  document.getElementById('devis-lines').innerHTML=devisLines.length?devisLines.map((l,i)=>`
+    <div style="padding:10px 14px;border-bottom:1px solid var(--border2)">
+      <div style="display:flex;gap:6px;margin-bottom:6px;align-items:center">
+        <input style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:12px" placeholder="Description article" value="${l.art}" oninput="devisLines[${i}].art=this.value">
+        <div onclick="devisLines.splice(${i},1);renderDevisLines()" style="color:var(--red);cursor:pointer;font-size:18px;padding:4px">✕</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <input type="number" style="width:70px;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:12px" placeholder="Qté" value="${l.qte}" oninput="devisLines[${i}].qte=+this.value;updateDevisRecap()">
+        <input type="number" style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:12px" placeholder="P.U. (DT)" value="${l.pu||''}" oninput="devisLines[${i}].pu=+this.value;updateDevisRecap()">
+      </div>
+    </div>`).join(''):'<div style="padding:20px;text-align:center;color:var(--text3);font-size:12px">Cliquez ➕ pour ajouter un article</div>';
+  updateDevisRecap();
+}
+function updateDevisRecap(){
+  const total=devisLines.reduce((a,l)=>a+l.qte*l.pu,0);
+  document.getElementById('devis-recap').textContent=fm(total);
+}
+function archiveCurrentDevis(){
+  if(!devisLines.length){showToast('Ajoutez au moins un article !','red');return;}
+  const total=devisLines.reduce((a,l)=>a+l.qte*l.pu,0);
+  const arc={id:Date.now(),num:devisNum,date:td(),client:document.getElementById('dm-cnom').value||'—',
+    tel:document.getElementById('dm-ctel').value,type:'DEVIS PRO',total,items:[...devisLines],notes:document.getElementById('dm-notes').value};
+  devisData.push(arc);devisNum++;SV('dnum',devisNum);SA();
+  showToast(`💾 Devis N°${arc.num} archivé !`,'green');
+  closeModal('modal-devis');rDevis();
+}
+function printDevisM(){
+  if(!devisLines.length){showToast('Ajoutez des articles !','red');return;}
+  const total=devisLines.reduce((a,l)=>a+l.qte*l.pu,0);
+  const nom=document.getElementById('dm-cnom').value||'—';
+  const tel=document.getElementById('dm-ctel').value;
+  const adr=document.getElementById('dm-cadr').value;
+  const notes=document.getElementById('dm-notes').value;
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>Devis N°${devisNum}</title>
+  <style>body{font-family:Arial,sans-serif;margin:30px;color:#1C1917;font-size:13px}
+  h1{color:#1A1A2E;font-size:22px;margin-bottom:4px}.sub{color:#888;font-size:12px;margin-bottom:20px}
+  table{width:100%;border-collapse:collapse;margin:16px 0}th{background:#1A1A2E;color:#fff;padding:8px;text-align:left}
+  td{padding:8px;border-bottom:1px solid #eee}.total{font-size:18px;font-weight:700;color:#D97706}
+  .footer{margin-top:30px;padding-top:10px;border-top:1px solid #eee;color:#888;font-size:11px;text-align:center}</style></head>
+  <body>
+  <h1>⚡ SYNERGY PARK EQUIPMENT</h1>
+  <div class="sub">Rue Monji Slim · Radès Plage · Grand Tunis · +216 20 910 909</div>
+  <div style="border:1px solid #eee;border-radius:8px;padding:14px;margin-bottom:20px">
+    <strong>Devis N°${String(devisNum).padStart(4,'0')}</strong> · Date: ${fd(td())}<br>
+    Client: <strong>${nom}</strong>${tel?' · '+tel:''}${adr?'<br>Adresse: '+adr:''}
+  </div>
+  <table><thead><tr><th>Article</th><th>Qté</th><th>P.U.</th><th>Total</th></tr></thead>
+  <tbody>${devisLines.map(l=>`<tr><td>${l.art}</td><td>${l.qte}</td><td>${l.pu} DT</td><td><strong>${l.qte*l.pu} DT</strong></td></tr>`).join('')}</tbody></table>
+  <div class="total">TOTAL TTC : ${fm(total)}</div>
+  ${notes?`<p style="margin-top:14px;color:#666">${notes}</p>`:''}
+  <div class="footer">⚡ Synergy Park Equipment · Matériel CHR Professionnel Occasion · Contrôlé · Révisé · Garanti</div>
+  </body></html>`);
+  w.document.close();setTimeout(()=>w.print(),300);
+  devisNum++;SV('dnum',devisNum);SA();
+}
+function showDevisArchive(){
+  document.getElementById('arc-list').innerHTML=devisData.length?devisData.slice().reverse().map(a=>`
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;padding:14px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--navy)">N°${String(a.num).padStart(4,'0')} · ${a.type}</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:3px">${fd(a.date)} · ${a.client}${a.tel?' · '+a.tel:''}</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--amber);margin-top:4px">${fm(a.total)}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">${(a.items||[]).map(l=>l.art||'—').join(' · ')}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn btn-amber btn-sm" onclick="printArchivedDevis(${a.id})">🖨️</button>
+          <button class="btn btn-ghost btn-sm" onclick="deleteArchivedDevis(${a.id})">🗑</button>
+        </div>
+      </div>
+    </div>`).join(''):'<div class="empty-state"><span class="icon">📂</span><p>Aucun devis archivé</p></div>';
+  document.getElementById('modal-arc').classList.add('open');
+}
+function printArchivedDevis(id){
+  const a=devisData.find(x=>x.id===id);if(!a)return;
+  devisLines=a.items||[];
+  document.getElementById('dm-cnom').value=a.client;
+  document.getElementById('dm-ctel').value=a.tel||'';
+  document.getElementById('dm-cadr').value='';
+  document.getElementById('dm-notes').value=a.notes||'';
+  printDevisM();
+  devisLines=[];
+}
+function deleteArchivedDevis(id){
+  if(!confirm('Supprimer ce devis ?'))return;
+  devisData=devisData.filter(x=>x.id!==id);SA();showDevisArchive();rDevis();
+}
+
+// ── CLIENTS ───────────────────────────────────────────────
+function rClients(){
+  const tot=CL.reduce((a,c)=>a+(c.mont||0),0);
+  document.getElementById('cl-stats').innerHTML=`
+    <div class="stat-cell"><div class="stat-val">${CL.length}</div><div class="stat-lbl">Clients</div></div>
+    <div class="stat-cell"><div class="stat-val" style="color:var(--amber)">${fm(tot)}</div><div class="stat-lbl">Total payé</div></div>
+    <div class="stat-cell"><div class="stat-val" style="color:var(--blue)">${CL.reduce((a,c)=>a+(c.nb||0),0)}</div><div class="stat-lbl">Achats</div></div>`;
+  filterClients();
+}
+function filterClients(){
+  const q=(document.getElementById('cl-search')?.value||'').toLowerCase();
+  let d=[...CL].sort((a,b)=>(b.mont||0)-(a.mont||0));
+  if(q)d=d.filter(c=>c.nom.toLowerCase().includes(q)||(c.tel||'').includes(q)||(c.zone||'').toLowerCase().includes(q));
+  document.getElementById('cl-count').textContent=`${d.length}`;
+  document.getElementById('clients-list').innerHTML=d.length?d.map(c=>`
+    <div class="list-item" onclick="openClientChat(${c.id})">
+      <div class="msg-avatar" style="background:${colorAvatar(c.nom)};color:#fff;font-size:15px">${initials(c.nom)}</div>
+      <div class="li-main">
+        <div class="li-name">${c.nom} <span style="font-size:10px;color:var(--text2)">· ${c.zone||'—'}</span></div>
+        <div class="li-sub">📞 ${c.tel} · ${c.nb||0} achat${(c.nb||0)>1?'s':''}</div>
+        <div style="font-size:10px;color:var(--teal);margin-top:2px">${c.cats||''}</div>
+      </div>
+      <div class="li-right">
+        <div class="li-val" style="color:var(--amber)">${fm(c.mont||0)}</div>
+        <div class="li-meta">${fd(c.date)}</div>
+        <div style="display:flex;gap:5px;margin-top:5px">
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openEditClient(${c.id})" style="padding:4px 8px;font-size:10px">✏️</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();if(confirm('Supprimer ${c.nom} ?')){CL=CL.filter(x=>x.id!==${c.id});SA();filterClients();showToast('🗑 Supprimé')}" style="padding:4px 8px;font-size:10px;color:var(--red)">🗑</button>
+        </div>
+      </div>
+    </div>`).join(''):`<div class="empty-state"><span class="icon">👥</span><p>Aucun client trouvé</p></div>`;
+}
+function openAddClient(){
+  document.getElementById('sh-cl-title').textContent='👥 Nouveau Client';
+  document.getElementById('clf-id').value='';
+  ['clf-nom','clf-tel','clf-zone','clf-cats','clf-arts','clf-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('clf-nb').value='0';
+  document.getElementById('clf-mont').value='0';
+  openSheet('sh-client');
+}
+function openEditClient(id){
+  const c=CL.find(x=>x.id===id);if(!c)return;
+  document.getElementById('sh-cl-title').textContent='✏️ Modifier Client';
+  document.getElementById('clf-id').value=id;
+  document.getElementById('clf-nom').value=c.nom;
+  document.getElementById('clf-tel').value=c.tel;
+  document.getElementById('clf-zone').value=c.zone||'';
+  document.getElementById('clf-cats').value=c.cats||'';
+  document.getElementById('clf-nb').value=c.nb||0;
+  document.getElementById('clf-mont').value=c.mont||0;
+  document.getElementById('clf-arts').value=c.arts||'';
+  document.getElementById('clf-note').value=c.note||'';
+  openSheet('sh-client');
+}
+function saveClient(){
+  const nom=document.getElementById('clf-nom').value.trim();
+  const tel=document.getElementById('clf-tel').value.trim();
+  if(!nom){showToast('Nom obligatoire !','red');return;}
+  const id=document.getElementById('clf-id').value;
+  const data={nom,tel:tel||'—',zone:document.getElementById('clf-zone').value,cats:document.getElementById('clf-cats').value,
+    nb:+document.getElementById('clf-nb').value||0,mont:+document.getElementById('clf-mont').value||0,
+    date:td(),arts:document.getElementById('clf-arts').value,note:document.getElementById('clf-note').value};
+  if(id){const i=CL.findIndex(x=>x.id==id);if(i>=0)CL[i]={...CL[i],...data};}
+  else{data.id=nC++;CL.push(data);}
+  SA();closeSheet('sh-client');filterClients();showToast(`✅ Client ${id?'modifié':'ajouté'} : ${nom}`,'green');
+}
+
+// ── MESSAGERIE ────────────────────────────────────────────
+let msgTabActive='int';
+let chatClientId=null;
+function rMsg(){
+  // Platform buttons
+  const platforms=[
+    {name:'WhatsApp',icon:'💬',color:'#25D366',url:`https://wa.me/${(CF.wa||'').replace(/[^0-9]/g,'')}`},
+    {name:'Facebook',icon:'📘',color:'#1877F2',url:CF.fb||'https://business.facebook.com'},
+    {name:'Instagram',icon:'📸',color:'#E1306C',url:CF.ig||'https://www.instagram.com'},
+    {name:'TikTok',icon:'🎵',color:'#010101',url:CF.tk||'https://www.tiktok.com'},
+    {name:'Meta Suite',icon:'🏢',color:'#0082FB',url:'https://business.facebook.com/inbox'},
+  ];
+  document.getElementById('platform-btns').innerHTML=platforms.map(p=>`
+    <a href="${p.url}" target="_blank" style="display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;flex-shrink:0">
+      <div style="width:46px;height:46px;background:${p.color};border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 12px ${p.color}55">${p.icon}</div>
+      <span style="font-size:9px;font-weight:600;color:var(--text2)">${p.name}</span>
+    </a>`).join('');
+  msgTab(msgTabActive);
+}
+function msgTab(t){
+  msgTabActive=t;
+  const intEl=document.getElementById('mtab-int');
+  const extEl=document.getElementById('mtab-ext');
+  intEl.style.borderBottomColor=t==='int'?'var(--amber)':'transparent';
+  intEl.style.color=t==='int'?'var(--navy)':'var(--text2)';
+  intEl.style.fontWeight=t==='int'?'700':'600';
+  extEl.style.borderBottomColor=t==='ext'?'var(--amber)':'transparent';
+  extEl.style.color=t==='ext'?'var(--navy)':'var(--text2)';
+  extEl.style.fontWeight=t==='ext'?'700':'600';
+  if(t==='int')renderMsgClients();
+  else renderMsgExt();
+}
+function renderMsgClients(){
+  const cl=CL.sort((a,b)=>(b.mont||0)-(a.mont||0));
+  document.getElementById('msg-list').innerHTML=cl.length?cl.map(c=>{
+    const notes=msgNotes[c.id]||[];
+    const last=notes.length?notes[notes.length-1]:null;
+    const unread=notes.filter(n=>!n.out&&!n.read).length;
+    return`<div class="msg-thread" onclick="openClientChat(${c.id})">
+      <div class="msg-avatar" style="background:${colorAvatar(c.nom)};color:#fff">${initials(c.nom)}</div>
+      <div class="msg-body">
+        <div style="display:flex;justify-content:space-between">
+          <span class="msg-name">${c.nom}</span>
+          ${last?`<span class="msg-time">${last.time}</span>`:''}
+        </div>
+        <div class="msg-preview">${last?last.text:`📞 ${c.tel} · ${c.zone||'—'}`}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+          <span style="font-size:10px;color:var(--text3)">${fd(c.date)} · ${fm(c.mont||0)}</span>
+          ${unread?`<span class="msg-unread">${unread}</span>`:''}
+        </div>
+      </div>
+    </div>`;}).join(''):`<div class="empty-state"><span class="icon">💬</span><p>Ajoutez des clients pour leur envoyer des notes</p></div>`;
+}
+function renderMsgExt(){
+  document.getElementById('msg-list').innerHTML=`
+    <div style="padding:14px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:12px">📱 Stratégie Messagerie Unifiée</div>
+      ${[
+        {icon:'💬',color:'#25D366',name:'WhatsApp Business',sub:'Centre principal · Catalogue · Réponses auto',tip:'Installez WhatsApp Business sur votre numéro +216 20 910 909',url:'https://business.whatsapp.com'},
+        {icon:'📘',color:'#1877F2',name:'Meta Business Suite',sub:'Facebook + Instagram en une seule boîte',tip:'Toutes les DM FB + IG arrivent dans une seule interface',url:'https://business.facebook.com/inbox'},
+        {icon:'🤖',color:'#FF5722',name:'ManyChat (Chatbot)',sub:'Réponse automatique 24h/24 gratuit',tip:'Chatbot pour FB + IG + WhatsApp — jusqu\'à 1000 contacts gratuit',url:'https://manychat.com'},
+        {icon:'🎵',color:'#010101',name:'TikTok',sub:'Bio → WhatsApp · Pas de redirection possible',tip:'Dans votre bio : "📱 wa.me/21620910909"',url:'https://tiktok.com'},
+      ].map(p=>`
+        <div class="plat-card" onclick="window.open('${p.url}','_blank')">
+          <div class="plat-icon" style="background:${p.color}22">${p.icon}</div>
+          <div class="plat-info">
+            <div class="plat-name">${p.name}</div>
+            <div class="plat-sub">${p.sub}</div>
+            <div style="font-size:10px;color:var(--blue);margin-top:4px;background:var(--blue2);border-radius:5px;padding:3px 7px;display:inline-block">💡 ${p.tip}</div>
+          </div>
+          <div class="plat-action">↗</div>
+        </div>`).join('')}
+    </div>`;
+}
+function openClientChat(id){
+  const c=CL.find(x=>x.id===id);if(!c)return;
+  chatClientId=id;
+  document.getElementById('chat-title').textContent=c.nom;
+  document.getElementById('chat-sub').textContent=`📞 ${c.tel} · ${c.zone||''} · ${fm(c.mont||0)}`;
+  const waNum=(c.tel||'').replace(/[^0-9]/g,'');
+  document.getElementById('chat-wa').href=`https://wa.me/${waNum}`;
+  document.getElementById('chat-wa').style.display=waNum?'inline-flex':'none';
+  renderChatMessages(id);
+  document.getElementById('modal-chat').classList.add('open');
+  setTimeout(()=>{const m=document.getElementById('chat-messages');m.scrollTop=m.scrollHeight;},100);
+}
+function renderChatMessages(id){
+  const notes=msgNotes[id]||[];
+  const c=CL.find(x=>x.id===id);
+  const msg_el=document.getElementById('chat-messages');
+  if(!notes.length){
+    msg_el.innerHTML=`<div style="text-align:center;padding:30px;color:#555">
+      <div style="font-size:36px;margin-bottom:8px">${initials(c?.nom||'?')}</div>
+      <div style="font-weight:700;font-size:15px;color:#1C1917">${c?.nom||'—'}</div>
+      <div style="font-size:12px;color:#666;margin-top:4px">📞 ${c?.tel||'—'}<br>${c?.cats||''}<br>Aucun message — commencez la conversation</div>
+    </div>`;return;
+  }
+  msg_el.innerHTML=notes.map(n=>`
+    <div class="bubble ${n.out?'out':'in'}">
+      <div class="bubble-inner">${n.text}</div>
+      <span class="bubble-time">${n.time}${n.out?' ✓✓':''}</span>
+    </div><div style="clear:both"></div>`).join('');
+  setTimeout(()=>{msg_el.scrollTop=msg_el.scrollHeight;},50);
+}
+function sendChat(){
+  const inp=document.getElementById('chat-input');
+  const text=inp.value.trim();if(!text||!chatClientId)return;
+  if(!msgNotes[chatClientId])msgNotes[chatClientId]=[];
+  msgNotes[chatClientId].push({text,time:tc(),out:true});
+  inp.value='';SA();renderChatMessages(chatClientId);
+}
+function openNewMsg(){
+  const sel=document.getElementById('mf-dest');
+  sel.innerHTML='<option value="">— Sélectionner client —</option>'+CL.map(c=>`<option value="${c.id}">${c.nom}</option>`).join('');
+  document.getElementById('mf-text').value='';
+  openSheet('sh-msg');
+}
+function sendMsgNote(){
+  const id=+document.getElementById('mf-dest').value;
+  const text=document.getElementById('mf-text').value.trim();
+  if(!id||!text){showToast('Sélectionnez un client et rédigez un message !','red');return;}
+  if(!msgNotes[id])msgNotes[id]=[];
+  msgNotes[id].push({text,time:tc(),out:true});
+  SA();closeSheet('sh-msg');showToast('✅ Note envoyée !','green');
+  renderMsgClients();
+}
+function openWhatsApp(){
+  const id=+document.getElementById('mf-dest').value;
+  const c=CL.find(x=>x.id===id);
+  const text=encodeURIComponent(document.getElementById('mf-text').value||'Bonjour !');
+  const num=(c?.tel||'').replace(/[^0-9]/g,'');
+  window.open(`https://wa.me/${num}?text=${text}`,'_blank');
+}
+
+// ── CATALOGUE ─────────────────────────────────────────────
+function rCatalogue(){
+  const d=[...SD].sort((a,b)=>a.cat.localeCompare(b.cat));
+  document.getElementById('catalogue-list').innerHTML=d.length?d.map(s=>{
+    const avp=Math.round((s.av||.5)*100);
+    const pret=s.st==='✅ PRÊT';
+    return`<div class="cat-mcard">
+      <div class="cat-mcard-head">
+        <span class="cat-mcode">${catCode(s.cat,s.id)}</span>
+        <span style="font-size:11px;color:var(--text2)">${s.cat}</span>
+        <span class="badge ${pret?'b-pret':'b-cours'}" style="margin-left:auto">${pret?'✅ Dispo':'🔧 En cours'}</span>
+      </div>
+      <div class="cat-mcard-body">
+        <div style="font-weight:700;font-size:13px;color:var(--navy);margin-bottom:6px">${s.art}</div>
+        <div class="prog"><div class="prog-fill" style="width:${avp}%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-top:4px">
+          <span>Avancement : ${avp}%</span>
+          ${s.prov?`<span>📍 ${s.prov}</span>`:''}
+        </div>
+        ${s.trav?`<div style="font-size:11px;color:var(--text2);margin-top:6px;background:var(--card2);border-radius:7px;padding:7px">🔧 ${s.trav}</div>`:''}
+      </div>
+    </div>`}).join(''):`<div class="empty-state"><span class="icon">📖</span><p>Stock vide</p></div>`;
+}
+function printCatalogue(){
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>Catalogue Synergy Park</title>
+  <style>body{font-family:Arial,sans-serif;margin:20px;font-size:12px;color:#1C1917}
+  .header{background:#1A1A2E;color:#fff;padding:16px 20px;border-radius:8px;margin-bottom:20px}
+  h1{font-size:22px;font-weight:700;letter-spacing:2px;margin:0}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .item{border:1px solid #E7E5E4;border-radius:8px;padding:12px;break-inside:avoid;background:#FDFAF6}
+  .code{font-size:10px;font-weight:700;color:#D97706;background:#FFFBEB;border:1px solid #F59E0B30;border-radius:4px;padding:2px 7px;display:inline-block;margin-bottom:6px}
+  .name{font-size:12px;font-weight:700;color:#1A1A2E;margin-bottom:3px}
+  .cat{font-size:10px;color:#78716C;margin-bottom:6px}
+  .avail{background:#D1FAE5;color:#065F46;border-radius:10px;padding:2px 8px;font-size:9px;font-weight:700}
+  .soon{background:#FEF3C7;color:#92400E;border-radius:10px;padding:2px 8px;font-size:9px;font-weight:700}
+  .footer{text-align:center;margin-top:20px;color:#888;font-size:10px;border-top:1px solid #eee;padding-top:10px}
+  @media print{.grid{grid-template-columns:repeat(3,1fr)}}</style></head>
+  <body>
+  <div class="header">
+    <h1>⚡ SYNERGY PARK EQUIPMENT</h1>
+    <p style="opacity:.6;margin:4px 0 0;font-size:11px">Catalogue Matériel CHR Professionnel Occasion · ${new Date().toLocaleDateString('fr-FR')} · Sans prix</p>
+    <p style="opacity:.4;font-size:10px;margin:2px 0 0">Rue Monji Slim · Radès Plage · Grand Tunis · +216 20 910 909</p>
+    <p style="background:rgba(217,119,6,.3);display:inline-block;padding:3px 10px;border-radius:4px;margin-top:8px;font-size:11px">✅ Tous équipements contrôlés · révisés · garantis</p>
+  </div>
+  <div class="grid">${SD.map(s=>`
+    <div class="item">
+      <span class="code">${catCode(s.cat,s.id)}</span>
+      <div class="name">${s.art}</div>
+      <div class="cat">${s.cat}</div>
+      <span class="${s.st==='✅ PRÊT'?'avail':'soon'}">${s.st==='✅ PRÊT'?'✅ Disponible':'🔧 En finition'}</span>
+      ${s.prov?`<div style="font-size:10px;color:#888;margin-top:4px">📍 ${s.prov}</div>`:''}
+    </div>`).join('')}</div>
+  <div class="footer">⚡ Synergy Park Equipment · +216 20 910 909 · Radès Plage · Grand Tunis</div>
+  </body></html>`);
+  w.document.close();setTimeout(()=>w.print(),400);
+}
+
+// ── ALERTES ───────────────────────────────────────────────
+function rAlertes(){
+  const als=[];
+  SD.forEach(s=>{const j=dd(s.de,td());
+    if(j&&j>90)als.push({lvl:'🚨',sev:'danger',a:s.art,m:`${j} jours en stock — republier d'urgence`,id:s.id});
+    else if(j&&j>45)als.push({lvl:'⚠️',sev:'warn',a:s.art,m:`${j} jours — nouvelles photos recommandées`,id:s.id});
+    if(s.st==='⭐ URGENT')als.push({lvl:'⭐',sev:'warn',a:s.art,m:`URGENT: ${s.trav}`,id:s.id});
+    if(s.st==='⚠ PERTE')als.push({lvl:'📉',sev:'danger',a:s.art,m:'En perte — action urgente',id:s.id});
+  });
+  if(CF.fond_creance>0)als.push({lvl:'💰',sev:'warn',a:'Fond de Commerce',m:`${fm(CF.fond_creance)} non encaissés`});
+  document.getElementById('alertes-list').innerHTML=als.length?als.map(a=>`
+    <div class="alert-strip ${a.sev==='danger'?'':'warn'}" style="margin-bottom:10px" ${a.id?`onclick="openStockDetail(${a.id})"`:''}>
+      <span style="font-size:22px">${a.lvl}</span>
+      <div class="al-text">
+        <strong>${a.a}</strong><br>${a.m}
+      </div>
+      ${a.id?'<span style="color:var(--text3)">→</span>':''}
+    </div>`).join(''):`<div class="alert-strip ok" style="margin-top:10px"><span>✅</span><span class="al-text"><strong>Tout est OK — aucune alerte !</strong></span></div>`;
+}
+
+// ── PLUS ──────────────────────────────────────────────────
+function rPlus(){
+  document.getElementById('plus-content').innerHTML=`
+    <div class="rounded-list" style="margin-bottom:14px">
+      <div class="list-item" onclick="go('devis')"><div class="li-icon" style="background:var(--amber4)">📄</div><div class="li-main"><div class="li-name">Devis</div><div class="li-sub">Créer et archiver des devis PDF</div></div><span style="color:var(--text3)">›</span></div>
+      <div class="list-item" onclick="go('catalogue')"><div class="li-icon" style="background:#FEE2E2">📖</div><div class="li-main"><div class="li-name">Catalogue</div><div class="li-sub">Catalogue imprimable sans prix</div></div><span style="color:var(--text3)">›</span></div>
+      <div class="list-item" onclick="go('alertes')"><div class="li-icon" style="background:#FEF3C7">🔔</div><div class="li-main"><div class="li-name">Alertes</div><div class="li-sub">Articles urgents et priorités</div></div><span style="color:var(--text3)">›</span></div>
+      <div class="list-item" onclick="go('config')"><div class="li-icon" style="background:#F1F5F9">⚙️</div><div class="li-main"><div class="li-name">Configuration</div><div class="li-sub">Fond · Charges · Réseaux sociaux</div></div><span style="color:var(--text3)">›</span></div>
+      <div class="list-item" onclick="openModal('modal-install')" style="background:#E8F5E9"><div class="li-icon" style="background:#C8E6C9">📲</div><div class="li-main"><div class="li-name" style="color:var(--green)">Installer l'application</div><div class="li-sub">Guide Android · iPhone · APK</div></div><span style="color:var(--green);font-weight:700">›</span></div>
+    </div>
+    <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:10px">🤖 Outils IA Recommandés</div>
+    ${[
+      {icon:'🤖',name:'ChatGPT',sub:'Rédiger annonces et descriptions',url:'https://chat.openai.com',color:'#10A37F'},
+      {icon:'🎨',name:'Canva',sub:'Visuels et affiches réseaux sociaux',url:'https://canva.com',color:'#8B5CF6'},
+      {icon:'📱',name:'Meta Business Suite',sub:'FB + IG en une seule boîte',url:'https://business.facebook.com',color:'#1877F2'},
+      {icon:'🤝',name:'ManyChat',sub:'Chatbot auto WhatsApp + Instagram',url:'https://manychat.com',color:'#FF5722'},
+      {icon:'🌐',name:'GitHub Pages',sub:'Héberger votre logiciel en ligne gratuit',url:'https://pages.github.com',color:'#333'},
+      {icon:'📲',name:'PWABuilder',sub:'Convertir en vraie app Android',url:'https://pwabuilder.com',color:'#0078D4'},
+    ].map(t=>`
+      <div class="plat-card" onclick="window.open('${t.url}','_blank')">
+        <div class="plat-icon" style="background:${t.color}22;font-size:24px">${t.icon}</div>
+        <div class="plat-info"><div class="plat-name">${t.name}</div><div class="plat-sub">${t.sub}</div></div>
+        <div class="plat-action" style="color:var(--text3)">↗</div>
+      </div>`).join('')}
+    <div style="background:linear-gradient(135deg,var(--navy),#0F3460);border-radius:14px;padding:18px;margin-top:6px;color:#fff">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#FCD34D;margin-bottom:10px">📱 Installer comme App Mobile</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.9">
+        <strong>Sur Android :</strong> Chrome → Menu ⋮ → "Ajouter à l'écran d'accueil"<br>
+        <strong>Sur iPhone :</strong> Safari → Partager → "Sur l'écran d'accueil"<br>
+        <strong>Vraie App :</strong> GitHub Pages → PWABuilder → Télécharger APK<br>
+        <span style="color:#6EE7B7;font-weight:600">✅ 100% gratuit · Données sur votre téléphone</span>
+      </div>
+    </div>`;
+}
+
+// ── CONFIG ────────────────────────────────────────────────
+function rConfig(){
+  document.getElementById('config-content').innerHTML=`
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><span class="card-title">🏛️ Fond de Commerce</span></div>
+      <div class="card-body">
+        <div class="input-row">
+          <div class="fg"><label>Fond Mur (DT)</label><input type="number" value="${CF.fond_mur}" onchange="CF.fond_mur=+this.value;SA()"></div>
+          <div class="fg"><label>Fond Travaux (DT)</label><input type="number" value="${CF.fond_travaux}" onchange="CF.fond_travaux=+this.value;SA()"></div>
+        </div>
+        <div class="input-row">
+          <div class="fg"><label>Encaissé (DT)</label><input type="number" value="${CF.fond_encaisse}" onchange="CF.fond_encaisse=+this.value;SA()"></div>
+          <div class="fg"><label>Créance (DT)</label><input type="number" value="${CF.fond_creance}" onchange="CF.fond_creance=+this.value;SA()"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><span class="card-title">💸 Charges Mensuelles</span></div>
+      <div class="card-body">
+        <div class="input-row">
+          <div class="fg"><label>Loyer (DT)</label><input type="number" value="${CF.loyer}" onchange="CF.loyer=+this.value;SA()"></div>
+          <div class="fg"><label>Gasoil (DT)</label><input type="number" value="${CF.gasoil}" onchange="CF.gasoil=+this.value;SA()"></div>
+        </div>
+        <div class="input-row">
+          <div class="fg"><label>Internet (DT)</label><input type="number" value="${CF.internet}" onchange="CF.internet=+this.value;SA()"></div>
+          <div class="fg"><label>Entretien (DT)</label><input type="number" value="${CF.entretien}" onchange="CF.entretien=+this.value;SA()"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><span class="card-title">📱 Réseaux Sociaux & Messagerie</span></div>
+      <div class="card-body">
+        <div class="fg"><label>WhatsApp (+216...)</label><input id="cf-wa" value="${CF.wa||''}" placeholder="+21620910909" onchange="CF.wa=this.value;SA()"></div>
+        <div class="fg"><label>Facebook (URL)</label><input id="cf-fb" value="${CF.fb||''}" placeholder="https://facebook.com/..." onchange="CF.fb=this.value;SA()"></div>
+        <div class="fg"><label>Instagram (URL)</label><input id="cf-ig" value="${CF.ig||''}" placeholder="https://instagram.com/..." onchange="CF.ig=this.value;SA()"></div>
+        <div class="fg"><label>TikTok (URL)</label><input id="cf-tk" value="${CF.tk||''}" placeholder="https://tiktok.com/..." onchange="CF.tk=this.value;SA()"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header" style="justify-content:space-between">
+        <span class="card-title">📦 Stock (${SD.length} articles)</span>
+        <button class="btn btn-amber btn-sm" onclick="openAddStock()">➕</button>
+      </div>
+      <div>${SD.slice(0,6).map(s=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border2)">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;font-weight:600;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.art}</div>
+            <span class="badge ${BST[s.st]||'b-cours'}" style="font-size:9px">${s.st}</span>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-ghost btn-sm" onclick="openEditStock(${s.id})">✏️</button>
+            <button class="btn btn-ghost btn-sm" onclick="deleteStock(${s.id})" style="color:var(--red)">🗑</button>
+          </div>
+        </div>`).join('')}
+      ${SD.length>6?`<div style="padding:10px;text-align:center;font-size:12px;color:var(--blue);cursor:pointer" onclick="go('stock')">Voir tous les ${SD.length} articles →</div>`:''}
+    </div>
+    <div style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:var(--r);padding:16px;margin-bottom:20px">
+      <div style="font-weight:700;font-size:13px;color:#0C4A6E;margin-bottom:8px">💾 Données partagées avec V13</div>
+      <div style="font-size:12px;color:#0369A1;line-height:1.75">
+        ✅ Ce fichier utilise les <strong>mêmes clés localStorage</strong> que SynergyPark V13<br>
+        Les données sont synchronisées si les deux sont ouverts sur le même navigateur.<br>
+        <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="if(confirm('Réinitialiser toutes les données ?')){localStorage.clear();location.reload();}">🗑 Réinitialiser les données</button>
+      </div>
+    </div>`;
+}
+
+// ── SHEETS / MODALS ───────────────────────────────────────
+function openSheet(id){document.getElementById(id).classList.add('open');}
+function closeSheet(id){document.getElementById(id).classList.remove('open');}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function openAddSheet(){openSheet('sh-add');}
+// Close overlay on backdrop click
+document.querySelectorAll('.overlay').forEach(el=>{
+  el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');});
+});
+
+// ════════════════════════════════════════════════════════════
+// 🎵 MUSIQUE D'AMBIANCE LOUNGE — Synthétiseur Web Audio complet
+// ════════════════════════════════════════════════════════════
+let AC=null, masterGain=null, soundOn=false, soundTimers=[];
+
+function initAC(){
+  if(AC)return;
+  AC=new(window.AudioContext||window.webkitAudioContext)();
+  masterGain=AC.createGain();
+  // Reverb (convolver simulé avec delay)
+  const delay=AC.createDelay(.8);
+  const delayGain=AC.createGain();
+  delayGain.gain.value=.18;
+  masterGain.connect(delay);
+  delay.connect(delayGain);
+  delayGain.connect(masterGain);
+  masterGain.connect(AC.destination);
+  masterGain.gain.value=0;
+  if(AC.state==='suspended')AC.resume();
+}
+
+// Fade master volume
+function fadeTo(target,dur=1){
+  if(!masterGain)return;
+  masterGain.gain.cancelScheduledValues(AC.currentTime);
+  masterGain.gain.setValueAtTime(masterGain.gain.value,AC.currentTime);
+  masterGain.gain.linearRampToValueAtTime(target,AC.currentTime+dur);
+}
+
+// Jouer une note synthétisée
+function playMusNote(freq,dur,startTime,vol=0.04,type='sine',detune=0){
+  if(!AC||!soundOn)return;
+  const osc=AC.createOscillator();
+  const env=AC.createGain();
+  osc.connect(env);
+  env.connect(masterGain);
+  osc.type=type;
+  osc.frequency.value=freq;
+  osc.detune.value=detune;
+  const t=startTime;
+  env.gain.setValueAtTime(0,t);
+  env.gain.linearRampToValueAtTime(vol,t+0.15);
+  env.gain.setValueAtTime(vol,t+dur-0.3);
+  env.gain.linearRampToValueAtTime(0,t+dur);
+  osc.start(t);
+  osc.stop(t+dur+0.05);
+}
+
+// Jouer accord piano-lounge
+function playChord(root,type='maj7',startTime,vol=0.035){
+  // Intervalles: maj7=[0,4,7,11], min7=[0,3,7,10], dom7=[0,4,7,10], maj=[0,4,7]
+  const intervals={maj7:[0,4,7,11],min7:[0,3,7,10],dom7:[0,4,7,10],maj:[0,4,7],min:[0,3,7],sus2:[0,2,7]};
+  const ivs=intervals[type]||intervals.maj7;
+  const baseFreq=root;
+  ivs.forEach((iv,i)=>{
+    const freq=baseFreq*Math.pow(2,iv/12);
+    playMusNote(freq,3.5,startTime+i*0.04,vol,'sine');
+    // Harmonique légère
+    playMusNote(freq*2,3.5,startTime+i*0.04,vol*0.12,'sine',3);
+  });
+}
+
+// Basse douce
+function playBass(freq,dur,startTime){
+  if(!AC||!soundOn)return;
+  playMusNote(freq/2,dur,startTime,0.055,'triangle');
+  playMusNote(freq/4,dur*0.7,startTime,0.025,'sine');
+}
+
+// Mélodie free-jazz douce
+function playMelody(scale,startTime,numNotes=5){
+  for(let i=0;i<numNotes;i++){
+    if(!soundOn)return;
+    const note=scale[Math.floor(Math.random()*scale.length)];
+    const dur=0.4+Math.random()*1.2;
+    const gap=0.3+Math.random()*0.8;
+    playMusNote(note*2,dur,startTime+i*gap,0.018+(Math.random()*.012),'sine',Math.random()*4-2);
+  }
+}
+
+// Percussion douce (hi-hat simulé)
+function playHihat(startTime,bpm=72){
+  if(!AC||!soundOn)return;
+  const beat=60/bpm;
+  for(let i=0;i<8;i++){
+    const buf=AC.createBuffer(1,AC.sampleRate*0.04,AC.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let j=0;j<data.length;j++)data[j]=(Math.random()*2-1)*Math.pow(1-j/data.length,3);
+    const src=AC.createBufferSource();
+    const flt=AC.createBiquadFilter();
+    const g=AC.createGain();
+    flt.type='highpass';flt.frequency.value=8000;
+    src.buffer=buf;
+    src.connect(flt);flt.connect(g);g.connect(masterGain);
+    g.gain.value=0.015;
+    src.start(startTime+i*beat*0.5);
+  }
+}
+
+// ── PROGRESSION D'ACCORDS LOUNGE ──────────────────────────
+// Tonalité Fa maj — Am7 → Dm7 → Gm7 → C7 (classique lounge)
+const LOUNGE_PROG=[
+  {root:220,type:'min7'},  // Am7
+  {root:293.66,type:'min7'}, // Dm7
+  {root:196,type:'min7'},  // Gm7
+  {root:261.63,type:'dom7'}, // C7
+  {root:349.23,type:'maj7'}, // Fmaj7
+  {root:246.94,type:'min7'}, // Bm7b5 → Em7
+];
+const FA_SCALE=[174.61,196,220,246.94,261.63,293.66,329.63,349.23,392,440,493.88];
+let progIdx=0,barTime=0,loopActive=false;
+
+function playBar(){
+  if(!soundOn||!AC)return;
+  const now=AC.currentTime;
+  const bpm=68; // tempo lounge doux
+  const barDur=60/bpm*4;
+  barTime=now;
+  const chord=LOUNGE_PROG[progIdx%LOUNGE_PROG.length];
+  progIdx++;
+  // Accord principal
+  playChord(chord.root,chord.type,now,0.038);
+  // Basse sur les temps 1 et 3
+  playBass(chord.root,0.8,now);
+  playBass(chord.root,0.8,now+60/bpm*2);
+  // Hi-hat
+  playHihat(now,bpm);
+  // Mélodie libre aléatoire (pas toujours)
+  if(Math.random()>0.3)playMelody(FA_SCALE,now+1.5,3+Math.floor(Math.random()*3));
+  // Enchaîner la prochaine mesure
+  soundTimers.push(setTimeout(playBar,barDur*1000));
+}
+
+function toggleSound(){
+  initAC();
+  soundOn=!soundOn;
+  const btn=document.getElementById('sound-btn');
+  if(soundOn){
+    fadeTo(0.75,1.2);
+    btn.innerHTML='<span style="display:flex;gap:2px;align-items:flex-end">'+'<span style="display:inline-block;width:3px;height:6px;background:#FCD34D;border-radius:2px;animation:sb .5s infinite alternate"></span>'.repeat(3)+'</span>';
+    btn.title='Musique ON — Couper';
+    btn.classList.add('amber');
+    loopActive=true;
+    playBar();
+  }else{
+    fadeTo(0,1);
+    btn.innerHTML='🔇';
+    btn.title='Activer musique lounge';
+    btn.classList.remove('amber');
+    loopActive=false;
+    soundTimers.forEach(clearTimeout);
+    soundTimers=[];
+  }
+}
+// Animation barres son
+const SB_STYLE=document.createElement('style');
+SB_STYLE.textContent='@keyframes sb{from{height:4px}to{height:12px}}';
+document.head.appendChild(SB_STYLE);
+
+// ── AUTO-PLAY dès première interaction ────────────────────
+let autoPlayDone=false;
+function tryAutoPlay(){
+  if(autoPlayDone||soundOn)return;
+  autoPlayDone=true;
+  soundOn=true;
+  initAC();
+  fadeTo(0.65,2);
+  const btn=document.getElementById('sound-btn');
+  btn.innerHTML='<span style="display:flex;gap:2px;align-items:flex-end">'+'<span style="display:inline-block;width:3px;height:6px;background:#FCD34D;border-radius:2px;animation:sb .5s infinite alternate"></span>'.repeat(3)+'</span>';
+  btn.classList.add('amber');
+  playBar();
+}
+document.addEventListener('touchstart',tryAutoPlay,{once:true,passive:true});
+document.addEventListener('click',tryAutoPlay,{once:true});
+
+// ════════════════════════════════════════════════════════════
+// 📲 SERVICE WORKER (PWA offline + installation)
+// ════════════════════════════════════════════════════════════
+if('serviceWorker' in navigator){
+  const swCode=`
+    const CACHE='sp-v1';
+    const FILES=['/'];
+    self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)));self.skipWaiting();});
+    self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
+    self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>new Response('App offline',{status:503}))));});
+  `;
+  const swBlob=new Blob([swCode],{type:'application/javascript'});
+  const swURL=URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swURL).catch(()=>{});
+}
+
+// ── INSTALL PROMPT (Android Chrome) ───────────────────────
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  document.getElementById('install-fab').style.display='flex';
+});
+window.addEventListener('appinstalled',()=>{
+  document.getElementById('install-fab').style.display='none';
+  showToast('✅ Application installée avec succès !','green');
+});
+function installApp(){
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')showToast('✅ Installation en cours...','green');deferredPrompt=null;});}
+  else{openModal('modal-install');}
+}
+
+// Update tab badges
+function updateBadges(){
+  const urg=SD.filter(s=>{const j=dd(s.de,td());return(j&&j>90)||s.st==='⭐ URGENT'||s.st==='⚠ PERTE';}).length;
+  const tbS=document.getElementById('tbadge-stock');
+  tbS.textContent=urg;tbS.style.display=urg?'flex':'none';
+  let unread=0;
+  Object.values(msgNotes).forEach(notes=>notes.forEach(n=>{if(!n.out&&!n.read)unread++;}));
+  const tbM=document.getElementById('tbadge-msg');
+  tbM.textContent=unread;tbM.style.display=unread?'flex':'none';
+  document.getElementById('alert-dot').style.display=urg?'block':'none';
+}
+
+// ── TOUTES LES DÉCLARATIONS AVANT L'INIT ─────────────────
+let clicksOn=LD('clicks',true);
+let docsData=LD('docs',[]), docNumGen=LD('docnum',1), facLines=[], facDocId=null, docTabActive='devis';
+let tSX=0, tSY=0;
+
+// ── CLICK SOUND ───────────────────────────────────────────
+function playClick(){
+  if(!clicksOn||!AC)return;
+  const o=AC.createOscillator(),g=AC.createGain();
+  o.connect(g);g.connect(AC.destination);o.type='sine';o.frequency.value=660;
+  g.gain.setValueAtTime(0,AC.currentTime);
+  g.gain.linearRampToValueAtTime(.05,AC.currentTime+.01);
+  g.gain.linearRampToValueAtTime(0,AC.currentTime+.07);
+  o.start(AC.currentTime);o.stop(AC.currentTime+.1);
+}
+
+// Init app
+go('dir');
+updateBadges();
+function switchDocTab(t){
+  docTabActive=t;
+  ['devis','facture'].forEach(x=>{
+    const el=document.getElementById('dtab-'+x);
+    if(el){el.className='doc-subtab'+(x===t?' on':'');}
+  });
+  rDocs();
+}
+function rDocs(){
+  const d=docsData.filter(x=>x.docType===docTabActive).slice().reverse();
+  document.getElementById('docs-subtitle').textContent=`${docsData.filter(x=>x.docType==='devis').length} devis · ${docsData.filter(x=>x.docType==='facture').length} factures`;
+  const statusBadge=s=>s==='paid'?'<span style="background:#D1FAE5;color:#065F46;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700">✅ Payé</span>':s==='partial'?'<span style="background:#FEF3C7;color:#92400E;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700">⚡ Partiel</span>':'<span style="background:#FEE2E2;color:#991B1B;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700">⏳ En attente</span>';
+  document.getElementById('docs-list').innerHTML=d.length?d.map(doc=>`
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-body">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+          <div style="flex:1">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--navy)">N°${String(doc.num).padStart(4,'0')} · ${doc.docType==='facture'?'🧾':'📄'} ${doc.docType==='facture'?'Facture':'Devis'}</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px">${fd(doc.date)} · ${doc.client||'—'}${doc.tel?' · '+doc.tel:''}</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--amber);margin-top:4px">${fm(doc.total)}</div>
+            ${doc.docType==='facture'?'<div style="margin-top:5px">'+statusBadge(doc.status)+'</div>':''}
+            <div style="font-size:10px;color:var(--text3);margin-top:5px">${(doc.items||[]).map(l=>l.art).join(' · ').slice(0,60)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button class="btn btn-amber btn-sm" onclick="openEditFac(${doc.id})">✏️ Voir</button>
+            <button class="btn btn-ghost btn-sm" onclick="shareDocId(${doc.id})">📤 Part.</button>
+            <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="confirmDelDoc(${doc.id})">🗑</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join(''):`<div style="text-align:center;padding:40px;color:var(--text3)"><div style="font-size:48px;margin-bottom:14px;opacity:.25">${docTabActive==='facture'?'🧾':'📄'}</div><p>Aucun ${docTabActive} archivé</p><br><button class="btn btn-amber btn-sm" onclick="openNewFac('${docTabActive}')">➕ Créer ${docTabActive==='devis'?'un devis':'une facture'}</button></div>`;
+}
+function openNewFac(type){
+  facDocId=null;facLines=[];
+  document.getElementById('fac-id').value='';
+  document.getElementById('fac-type').value=type;
+  document.getElementById('fac-modal-ttl').textContent=type==='facture'?'🧾 Nouvelle Facture':'📄 Nouveau Devis';
+  document.getElementById('fac-status-wrap').style.display=type==='facture'?'block':'none';
+  ['fac-cnom','fac-ctel','fac-cadr','fac-notes'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  const d=new Date();d.setDate(d.getDate()+30);
+  document.getElementById('fac-valid').value=d.toISOString().slice(0,10);
+  renderFacLines();
+  document.getElementById('m-facture').classList.add('on');
+}
+function openEditFac(id){
+  const doc=docsData.find(x=>x.id===id);if(!doc)return;
+  facDocId=id;facLines=[...doc.items||[]];
+  document.getElementById('fac-id').value=id;
+  document.getElementById('fac-type').value=doc.docType;
+  document.getElementById('fac-modal-ttl').textContent=doc.docType==='facture'?`🧾 Facture N°${String(doc.num).padStart(4,'0')}`:`📄 Devis N°${String(doc.num).padStart(4,'0')}`;
+  document.getElementById('fac-status-wrap').style.display=doc.docType==='facture'?'block':'none';
+  document.getElementById('fac-cnom').value=doc.client||'';
+  document.getElementById('fac-ctel').value=doc.tel||'';
+  document.getElementById('fac-cadr').value=doc.adr||'';
+  document.getElementById('fac-notes').value=doc.notes||'';
+  document.getElementById('fac-valid').value=doc.valid||'';
+  if(document.getElementById('fac-status'))document.getElementById('fac-status').value=doc.status||'pending';
+  renderFacLines();
+  document.getElementById('m-facture').classList.add('on');
+}
+function addFacLine(){facLines.push({art:'',qte:1,pu:0});renderFacLines();}
+function renderFacLines(){
+  document.getElementById('fac-lines').innerHTML=facLines.length?facLines.map((l,i)=>`
+    <div style="padding:10px 14px;border-bottom:1px solid var(--border2)">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:7px">
+        <input style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:12px;font-family:'Poppins',sans-serif" placeholder="Description" value="${l.art}" oninput="facLines[${i}].art=this.value">
+        <div onclick="facLines.splice(${i},1);renderFacLines()" style="color:var(--red);cursor:pointer;font-size:20px;padding:2px 6px">✕</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="number" style="width:60px;padding:8px;border:1.5px solid var(--border);border-radius:9px;font-size:12px" placeholder="Qté" value="${l.qte}" oninput="facLines[${i}].qte=+this.value;updFacTotal()">
+        <input type="number" style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:9px;font-size:12px" placeholder="P.U. (DT)" value="${l.pu||''}" oninput="facLines[${i}].pu=+this.value;updFacTotal()">
+        <div style="background:var(--card2);border-radius:9px;padding:8px 10px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap">${fm(l.qte*l.pu)}</div>
+      </div>
+    </div>`).join(''):'<div style="padding:20px;text-align:center;color:var(--text3);font-size:12px">Cliquez ➕ Ligne pour ajouter des articles</div>';
+  updFacTotal();
+}
+function updFacTotal(){const t=facLines.reduce((a,l)=>a+l.qte*l.pu,0);document.getElementById('fac-total').textContent=fm(t);}
+function saveFacture(){
+  if(!facLines.length){showToast('Ajoutez au moins un article !','red');return;}
+  const total=facLines.reduce((a,l)=>a+l.qte*l.pu,0);
+  const type=document.getElementById('fac-type').value;
+  const doc={
+    id:facDocId||Date.now(),
+    num:facDocId?docsData.find(x=>x.id===facDocId)?.num:docNumGen++,
+    docType:type,date:td(),
+    client:document.getElementById('fac-cnom').value||'—',
+    tel:document.getElementById('fac-ctel').value,
+    adr:document.getElementById('fac-cadr').value,
+    notes:document.getElementById('fac-notes').value,
+    valid:document.getElementById('fac-valid').value,
+    status:document.getElementById('fac-status')?.value||'pending',
+    total,items:[...facLines]
+  };
+  if(facDocId){const i=docsData.findIndex(x=>x.id===facDocId);if(i>=0)docsData[i]=doc;else docsData.push(doc);}
+  else docsData.push(doc);
+  SV('docnum',docNumGen);SA();
+  showToast(`✅ ${type==='facture'?'Facture':'Devis'} N°${String(doc.num).padStart(4,'0')} sauvegardé !`,'green');
+  rDocs();
+}
+function getDocText(doc){
+  const isF=doc.docType==='facture';
+  return `⚡ *SYNERGY PARK EQUIPMENT*\n${isF?'🧾 FACTURE PRO FORMA':'📄 DEVIS'} N°${String(doc.num).padStart(4,'0')}\n\n👤 *Client:* ${doc.client||'—'}${doc.tel?'\n📞 '+doc.tel:''}\n📅 Date: ${fd(doc.date)}${doc.valid?'\n✅ Validité: '+fd(doc.valid):''}\n\n📋 *Articles:*\n${(doc.items||[]).map(l=>`• ${l.art} × ${l.qte} = ${fm(l.qte*l.pu)}`).join('\n')}\n\n💰 *TOTAL: ${fm(doc.total)}*\n${isF?'\n💳 Statut: '+(doc.status==='paid'?'✅ Payé':doc.status==='partial'?'⚡ Paiement partiel':'⏳ En attente de paiement'):''}${doc.notes?'\n\n📝 '+doc.notes:''}\n\n📞 +216 20 910 909\n📍 Rue Monji Slim · Radès Plage · Grand Tunis\n✅ Matériel contrôlé · révisé · garanti`;
+}
+function shareDocId(id){
+  const doc=docsData.find(x=>x.id===id);if(!doc)return;
+  openEditFac(id);setTimeout(()=>shareDoc('native'),300);
+}
+function shareDoc(method){
+  saveFacture();
+  const id=document.getElementById('fac-id').value?+document.getElementById('fac-id').value:null;
+  const doc=id?docsData.find(x=>x.id===id):docsData[docsData.length-1];
+  if(!doc)return;
+  const txt=getDocText(doc);
+  const waN=(CF.wa||'21620910909').replace(/[^0-9]/g,'');
+  if(method==='wa')window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`,'_blank');
+  else if(method==='fb')window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(txt.slice(0,200))}`,'_blank');
+  else if(method==='ig'){navigator.clipboard?.writeText(txt).then(()=>{showToast('📋 Texte copié ! Collez dans Instagram','green');window.open(CF.ig||'https://instagram.com','_blank');});}
+  else if(method==='copy'){
+    if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>showToast('📋 Copié dans le presse-papier !','green')).catch(()=>{fallbackCopy(txt);});}
+    else fallbackCopy(txt);
+  } else {
+    if(navigator.share){navigator.share({title:'Document Synergy Park',text:txt}).catch(()=>{});}
+    else{if(navigator.clipboard)navigator.clipboard.writeText(txt).then(()=>showToast('📋 Copié !','green'));else fallbackCopy(txt);}
+  }
+}
+function fallbackCopy(txt){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('📋 Copié !','green');}
+function printFacture(){
+  saveFacture();
+  const id=document.getElementById('fac-id').value?+document.getElementById('fac-id').value:null;
+  const doc=id?docsData.find(x=>x.id===id):docsData[docsData.length-1];
+  if(!doc)return;
+  const isF=doc.docType==='facture';
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>${isF?'Facture':'Devis'} N°${String(doc.num).padStart(4,'0')}</title>
+  <meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1C1917;font-size:12px;padding:28px;max-width:680px;margin:auto}
+  .hdr{border-bottom:3px solid #1A1A2E;padding-bottom:14px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-start}
+  .brand{font-size:20px;font-weight:800;color:#1A1A2E;letter-spacing:1px}.brand-sub{font-size:10px;color:#78716C;margin-top:3px}
+  .doc-ttl{font-size:18px;font-weight:800;color:#C9A84C;text-align:right}.doc-num{font-size:11px;color:#78716C;text-align:right}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+  .info-box{background:#F7F5F0;border-radius:7px;padding:11px}.info-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:#78716C;letter-spacing:.8px;margin-bottom:4px}
+  table{width:100%;border-collapse:collapse;margin-bottom:14px}
+  thead tr{background:#1A1A2E}thead th{color:#fff;padding:8px;font-size:11px;font-weight:600;text-align:left}
+  tbody td{padding:8px;border-bottom:1px solid #E7E5E4;font-size:11px}tbody tr:nth-child(even){background:#F7F5F0}
+  .total-row td{background:#1A1A2E!important;color:#fff!important;font-weight:700;padding:10px 8px!important;font-size:13px}
+  .gold{color:#C9A84C!important;font-size:15px!important}.status{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-top:10px}
+  .paid{background:#D1FAE5;color:#065F46}.pending{background:#FEE2E2;color:#991B1B}.partial{background:#FEF3C7;color:#92400E}
+  .sign-box{border:1px solid #E7E5E4;border-radius:8px;padding:14px;text-align:center;width:170px;font-size:10px;color:#A8A29E;height:80px}
+  .footer{margin-top:18px;padding-top:10px;border-top:1px solid #E7E5E4;display:flex;justify-content:space-between;font-size:10px;color:#A8A29E}
+  @media print{body{padding:14px}}</style></head><body>
+  <div class="hdr">
+    <div><div class="brand">⚡ SYNERGY PARK EQUIPMENT</div>
+    <div class="brand-sub">Matériel CHR Professionnel Occasion · Contrôlé · Révisé · Garanti</div>
+    <div class="brand-sub">Rue Monji Slim · Radès Plage · Grand Tunis · +216 20 910 909</div></div>
+    <div><div class="doc-ttl">${isF?'FACTURE PRO FORMA':'DEVIS'}</div>
+    <div class="doc-num">N° ${String(doc.num).padStart(4,'0')} · ${fd(doc.date)}</div>
+    ${doc.valid?`<div class="doc-num">Validité: ${fd(doc.valid)}</div>`:''}
+    </div>
+  </div>
+  <div class="info-grid">
+    <div class="info-box"><div class="info-lbl">Émis par</div><div style="font-size:11px;font-weight:600;line-height:1.7">Synergy Park Equipment<br>Radès Plage · Grand Tunis<br>+216 20 910 909</div></div>
+    <div class="info-box"><div class="info-lbl">${isF?'Facturé à':'Devis pour'}</div><div style="font-size:11px;font-weight:600;line-height:1.7">${doc.client||'—'}${doc.tel?'<br>'+doc.tel:''}${doc.adr?'<br>'+doc.adr:''}</div></div>
+  </div>
+  <table><thead><tr><th>#</th><th>Description</th><th style="text-align:center">Qté</th><th style="text-align:right">P.U.</th><th style="text-align:right">Total</th></tr></thead>
+  <tbody>${(doc.items||[]).map((l,i)=>`<tr><td>${i+1}</td><td>${l.art||'—'}</td><td style="text-align:center">${l.qte}</td><td style="text-align:right">${l.pu} DT</td><td style="text-align:right;font-weight:600">${fm(l.qte*l.pu)}</td></tr>`).join('')}
+  <tr class="total-row"><td colspan="4" style="text-align:right">TOTAL TTC</td><td class="gold">${fm(doc.total)}</td></tr></tbody></table>
+  ${isF?`<span class="status ${doc.status||'pending'}">${doc.status==='paid'?'✅ PAYÉ INTÉGRALEMENT':doc.status==='partial'?'⚡ PAIEMENT PARTIEL':'⏳ EN ATTENTE DE PAIEMENT'}</span>`:''}
+  ${doc.notes?`<div style="background:#F7F5F0;border-radius:7px;padding:10px;margin-top:12px;font-size:11px;color:#78716C">${doc.notes}</div>`:''}
+  <div style="display:flex;justify-content:space-between;margin-top:20px;align-items:flex-end">
+    ${isF?`<div class="sign-box">Cachet & Signature Client<br><br>Date: __________</div>`:'<div></div>'}
+    <div class="sign-box">Cachet & Signature<br>Synergy Park Equipment</div>
+  </div>
+  <div class="footer"><span>⚡ Synergy Park Equipment · Radès Plage · Grand Tunis</span><span>Imprimé le ${fd(td())}</span></div>
+  </body></html>`);
+  w.document.close();setTimeout(()=>w.print(),400);
+}
+function prefillFacClient(){
+  document.getElementById('pick-client-list').innerHTML=CL.map(c=>`
+    <div class="list-item" onclick="pickClient(${c.id})" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border2);cursor:pointer;background:var(--card)">
+      <div style="width:40px;height:40px;border-radius:50%;background:${colorAvatar(c.nom)};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px">${initials(c.nom)}</div>
+      <div><div style="font-weight:700;font-size:13px">${c.nom}</div><div style="font-size:11px;color:var(--text2)">📞 ${c.tel} · ${c.zone||'—'}</div></div>
+    </div>`).join('');
+  document.getElementById('m-pick-client').classList.add('on');
+}
+function pickClient(id){
+  const c=CL.find(x=>x.id===id);if(!c)return;
+  document.getElementById('fac-cnom').value=c.nom;
+  document.getElementById('fac-ctel').value=c.tel||'';
+  document.getElementById('fac-cadr').value=c.zone||'';
+  document.getElementById('m-pick-client').classList.remove('on');
+}
+function confirmDelDoc(id){
+  if(confirm('Supprimer ce document ?')){docsData=docsData.filter(x=>x.id!==id);SA();rDocs();showToast('🗑 Supprimé');}
+}
+
+// ── PWA MANIFEST DYNAMIQUE ────────────────────────────────
+const mData={name:'Synergy Park Equipment',short_name:'SP Equipment',display:'standalone',
+  background_color:'#1A1A2E',theme_color:'#1A1A2E',start_url:'.',
+  icons:[{src:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="40" fill="%231A1A2E"/><rect x="10" y="10" width="172" height="172" rx="34" fill="none" stroke="%23C9A84C" stroke-width="4"/><text y="138" x="14" font-size="128" font-family="Arial">⚡</text></svg>',sizes:'192x192',type:'image/svg+xml'}]};
+const mBlob=new Blob([JSON.stringify(mData)],{type:'application/json'});
+const mLink=document.getElementById('pwa-manifest');if(mLink)mLink.href=URL.createObjectURL(mBlob);
+
+// ── SERVICE WORKER ────────────────────────────────────────
+if('serviceWorker' in navigator){
+  const sw=`const C='sp-v3';self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))));self.clients.claim();});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));});`;
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});
+}
+
+// ── SPLASH → INIT ─────────────────────────────────────────
+setTimeout(()=>{
+  const s=document.getElementById('splash');
+  if(s){s.classList.add('hide');setTimeout(()=>s.style.display='none',900);}
+},2800);
+document.getElementById('app').addEventListener('touchstart',e=>{tSX=e.touches[0].clientX;tSY=e.touches[0].clientY;},{passive:true});
+document.getElementById('app').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tSX;
+  const dy=Math.abs(e.changedTouches[0].clientY-tSY);
+  if(Math.abs(dx)>65&&dy<55){
+    const ci=MAIN_TABS.indexOf(currentScreen);
+    if(ci>=0){const ni=dx<0?Math.min(ci+1,MAIN_TABS.length-1):Math.max(ci-1,0);if(ni!==ci){go(MAIN_TABS[ni]);if(navigator.vibrate)navigator.vibrate(6);}}
+  }
+},{passive:true});
+
+// ── CLOCK ─────────────────────────────────────────────────
+setInterval(()=>{document.title=`⚡ SP · ${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}`;},30000);
+</script>
+</body>
+</html>
